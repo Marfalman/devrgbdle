@@ -18,7 +18,11 @@ const TrueColor = (props) => {
     draw(context);
   }, []);
 
-  return <canvas ref={canvasRef} {...props} />;
+  return (
+    <div>
+      <canvas ref={canvasRef} {...props} width="384" height="70" />
+    </div>
+  );
 };
 
 export default TrueColor;

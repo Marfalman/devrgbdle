@@ -1,20 +1,22 @@
 import React from "react";
-import { TextField, InputAdornment } from "@mui/material/";
+import GuessComp from "./GuessComp";
 
 export default function Guess() {
   return (
-    <TextField
-      label=""
-      id="r-value"
-      InputProps={{
-        style: { fontSize: 40, color: "#2C2C2C" },
-        startAdornment: (
-          <InputAdornment position="start">
-            <p style={{ fontSize: 25, color: "#929292" }}>R</p>
-          </InputAdornment>
-        ),
+    <div
+      style={{
+        display: "flex",
+        justifyContent: "space-around",
+        alignItems: "center",
+        width: 384,
+        height: 70,
+        border: "3px solid #CDD0D5",
+        margin: "6px 0",
       }}
-      variant="standard"
-    />
+    >
+      <GuessComp letter={"R"} />
+      <GuessComp letter={"G"} />
+      <GuessComp letter={"B"} />
+    </div>
   );
 }
