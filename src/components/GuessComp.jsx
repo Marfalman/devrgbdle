@@ -22,9 +22,6 @@ export default function GuessComp(props) {
           color: inputColor,
           height: 40,
           margin: "0 5px",
-          "&$disabled": {
-            borderColor: "orange",
-          },
         },
         startAdornment: (
           <InputAdornment position="start">
