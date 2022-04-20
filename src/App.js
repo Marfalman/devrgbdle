@@ -1,3 +1,5 @@
+import React, { useState } from "react";
+
 import CssBaseline from "@mui/material/CssBaseline";
 
 import Logo from "./components/Logo";
@@ -9,13 +11,19 @@ import HelpIcon from "@mui/icons-material/Help";
 import { IconButton } from "@mui/material";
 
 function App() {
+  const [modalOpen, setModalOpen] = useState(false);
+
+  const openModal = () => {
+    setModalOpen(true);
+  };
+
   return (
     <div className="App">
       <CssBaseline />
-      <IconButton style={{ position: "fixed" }}>
+      <IconButton style={{ position: "fixed" }} onClick={openModal}>
         <HelpIcon />
       </IconButton>
-      <HelpModal />
+      <HelpModal open={modalOpen} passModalOpen={setModalOpen} />
       <div
         className="main"
         style={{
