@@ -16,6 +16,8 @@ export default function GuessComp(props) {
       }}
       inputProps={{ maxLength: 3, min: 0, max: 255 }}
       variant="standard"
+      value={props.val}
+      onChange={(e) => props.passVal(e.target.value)}
     />
   );
 }
