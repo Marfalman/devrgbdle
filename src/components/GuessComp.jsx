@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { TextField, InputAdornment } from "@mui/material/";
+import { TextField, InputAdornment, Input } from "@mui/material/";
 
 export default function GuessComp(props) {
   const [labelColor, setLabelColor] = useState("#929292");
@@ -13,22 +13,24 @@ export default function GuessComp(props) {
   }, [props.bw]);
 
   return (
-    <TextField
+    <Input
       id={`${props.letter}-value`}
-      InputProps={{
-        type: "number",
-        style: {
-          fontSize: 40,
-          color: inputColor,
-          height: 40,
-          margin: "0 5px",
+      type="number"
+      sx={{
+        fontSize: 40,
+        color: inputColor,
+        height: 40,
+        margin: "0 5px",
+        "&.Mui-disabled input": {
+          color: labelColor,
+          "-webkit-text-fill-color": labelColor,
         },
-        startAdornment: (
-          <InputAdornment position="start">
-            <p style={{ fontSize: 25, color: labelColor }}>{props.letter}</p>
-          </InputAdornment>
-        ),
       }}
+      startAdornment={
+        <InputAdornment position="start">
+          <p style={{ fontSize: 25, color: labelColor }}>{props.letter}</p>
+        </InputAdornment>
+      }
       inputProps={{ maxLength: 3, min: 0, max: 255 }}
       variant="standard"
       value={props.val}
