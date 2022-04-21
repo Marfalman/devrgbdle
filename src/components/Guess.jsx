@@ -1,7 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import GuessComp from "./GuessComp";
+import { TheColor } from "./TheColor";
 
 export default function Guess() {
+  const answerColor = useContext(TheColor);
   const [rVal, setRVal] = useState("");
   const [gVal, setGVal] = useState("");
   const [bVal, setBVal] = useState("");
@@ -31,11 +33,20 @@ export default function Guess() {
 
   const [disableInputs, setDisableInputs] = useState(false);
 
-  const onFormSubmit = (e) => {
+  const onFormSubmit = async (e) => {
     e.preventDefault();
-    setRgb(`rgba(${rVal}, ${gVal}, ${bVal}, 1)`);
-    setDisableInputs(true);
-    calculateContrast();
+    var newRGB = await setField();
+    matchColor(newRGB);
+  };
+
+  const setField = async function () {
+    return new Promise((resolve) => {
+      const rgb = `rgba(${rVal}, ${gVal}, ${bVal}, 1)`;
+      setRgb(rgb);
+      setDisableInputs(true);
+      calculateContrast();
+      resolve(rgb);
+    });
   };
 
   const calculateContrast = () => {
@@ -58,11 +69,14 @@ export default function Guess() {
     } else {
       setContrast("white");
     }
-    // if L > 0.179 use #000000 else use #ffffff
-    //     for each c in r,g,b:
-    //     c = c / 255.0
-    //     if c <= 0.03928 then c = c/12.92 else c = ((c+0.055)/1.055) ^ 2.4
-    // L = 0.2126 * r + 0.7152 * g + 0.0722 * b
+  };
+
+  const matchColor = (color) => {
+    if (answerColor === color) {
+      console.log("win!");
+    } else {
+      console.log(answerColor, color);
+    }
   };
 
   return (

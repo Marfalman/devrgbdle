@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { TextField, InputAdornment, Input } from "@mui/material/";
+import { InputAdornment, Input } from "@mui/material/";
 
 export default function GuessComp(props) {
   const [labelColor, setLabelColor] = useState("#929292");
@@ -23,7 +23,7 @@ export default function GuessComp(props) {
         margin: "0 5px",
         "&.Mui-disabled input": {
           color: labelColor,
-          "-webkit-text-fill-color": labelColor,
+          WebkitTextFillColor: labelColor,
         },
       }}
       startAdornment={

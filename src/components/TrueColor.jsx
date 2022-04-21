@@ -1,11 +1,13 @@
-import React, { useRef, useEffect } from "react";
+import React, { useRef, useEffect, useContext } from "react";
+import { TheColor } from "./TheColor";
 
 const TrueColor = (props) => {
+  const answerColor = useContext(TheColor);
   const canvasRef = useRef(null);
 
   useEffect(() => {
     const draw = (ctx) => {
-      ctx.fillStyle = "#CD82C8";
+      ctx.fillStyle = answerColor;
       ctx.beginPath();
       ctx.rect(0, 0, 384, 70);
       ctx.fill();
@@ -16,7 +18,7 @@ const TrueColor = (props) => {
 
     //Our draw come here
     draw(context);
-  }, []);
+  }, [answerColor]);
 
   return (
     <div>
