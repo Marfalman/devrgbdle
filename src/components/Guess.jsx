@@ -1,14 +1,18 @@
 import React, { useState, useEffect, useContext } from "react";
 import GuessComp from "./GuessComp";
 import { TheColor } from "./TheColor";
+import ConfettiEl from "./ConfettiEl";
 
-export default function Guess() {
+export default function Guess(props) {
   const answerColor = useContext(TheColor);
   const [rVal, setRVal] = useState("");
   const [gVal, setGVal] = useState("");
   const [bVal, setBVal] = useState("");
   const [rgb, setRgb] = useState("rgba(255, 255, 255, 1)");
   const [contrast, setContrast] = useState("");
+  const [disableInputs, setDisableInputs] = useState(false);
+  const [win, setWin] = useState(false);
+  const [borderColor, setBorderColor] = useState("#CDD0D5");
 
   useEffect(() => {
     if (rVal < 0) {
@@ -31,7 +35,11 @@ export default function Guess() {
     }
   }, [rVal, gVal, bVal]);
 
-  const [disableInputs, setDisableInputs] = useState(false);
+  useEffect(() => {
+    if (props.done) {
+      setDisableInputs(true);
+    }
+  }, [props.done]);
 
   const onFormSubmit = async (e) => {
     e.preventDefault();
@@ -73,14 +81,17 @@ export default function Guess() {
 
   const matchColor = (color) => {
     if (answerColor === color) {
-      console.log("win!");
-    } else {
-      console.log(answerColor, color);
+      setWin(true);
+      setBorderColor(answerColor);
+      props.passWin(true);
     }
   };
 
   return (
-    <form onSubmit={onFormSubmit}>
+    <form
+      onSubmit={onFormSubmit}
+      style={{ display: "flex", flexDirection: "column", alignItems: "center" }}
+    >
       <div
         style={{
           display: "flex",
@@ -88,7 +99,7 @@ export default function Guess() {
           alignItems: "center",
           width: 384,
           height: 70,
-          border: "3px solid #CDD0D5",
+          border: `3px solid ${borderColor}`,
           margin: "6px 0",
           backgroundColor: rgb,
         }}
@@ -118,6 +129,7 @@ export default function Guess() {
           Submit
         </button>
       </div>
+      <ConfettiEl confetti={win} />
     </form>
   );
 }

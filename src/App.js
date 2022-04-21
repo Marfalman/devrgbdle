@@ -34,6 +34,7 @@ function App() {
         }}
       >
         <Logo />
+
         <TrueColor />
         <Guesses />
       </div>

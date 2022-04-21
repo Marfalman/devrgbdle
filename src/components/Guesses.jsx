@@ -1,15 +1,17 @@
-import React from "react";
+import React, { useState } from "react";
 import Guess from "./Guess";
 
 export default function Guesses() {
+  const [gameOver, setGameOver] = useState(false);
+
   return (
     <div>
-      <Guess />
-      <Guess />
-      <Guess />
-      <Guess />
-      <Guess />
-      <Guess />
+      <Guess done={gameOver} passWin={setGameOver} />
+      <Guess done={gameOver} passWin={setGameOver} />
+      <Guess done={gameOver} passWin={setGameOver} />
+      <Guess done={gameOver} passWin={setGameOver} />
+      <Guess done={gameOver} passWin={setGameOver} />
+      <Guess done={gameOver} passWin={setGameOver} />
     </div>
   );
 }
