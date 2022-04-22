@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import CssBaseline from "@mui/material/CssBaseline";
 import Logo from "./components/Logo";
-import TrueColor from "./components/TrueColor";
+import Answer from "./components/Answer";
 import Guesses from "./components/Guesses";
 import HelpModal from "./components/HelpModal";
 
@@ -40,7 +40,7 @@ function App() {
         }}
       >
         <Logo />
-        <TrueColor lose={lose.toString()} />
+        <Answer lose={lose.toString()} />
         <Guesses num={guessNum} passGuessNo={setGuessNum} />
       </div>
     </div>

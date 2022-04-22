@@ -2,7 +2,7 @@ import React, { useRef, useEffect, useContext, useState } from "react";
 import StaticGuess from "./StaticGuess";
 import { TheColor } from "./TheColor";
 
-const TrueColor = (props) => {
+const Answer = (props) => {
   const answerColor = useContext(TheColor);
   const canvasRef = useRef(null);
   const [RGB, setRGB] = useState([]);
@@ -48,4 +48,4 @@ const TrueColor = (props) => {
   }
 };
 
-export default TrueColor;
+export default Answer;
