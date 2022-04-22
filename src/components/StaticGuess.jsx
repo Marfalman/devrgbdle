@@ -3,7 +3,7 @@ import GuessComp from "./GuessComp";
 import { TheColor } from "./TheColor";
 
 export default function StaticGuess(props) {
-  const answerColor = useContext(TheColor);
+  const [rgba, setRgba] = useState("");
   const [contrast, setContrast] = useState("");
 
   useEffect(() => {
@@ -29,6 +29,8 @@ export default function StaticGuess(props) {
       }
     };
     calculateContrast();
+    const calculatedRgba = `rgba(${props.colors[0]}, ${props.colors[1]}, ${props.colors[2]}, 1)`;
+    setRgba(calculatedRgba);
   }, [props.colors]);
 
   return (
@@ -43,8 +45,8 @@ export default function StaticGuess(props) {
           width: 384,
           height: 70,
           marginBottom: 6,
-          border: `3px solid ${answerColor}`,
-          backgroundColor: answerColor,
+          border: `3px solid ${rgba}`,
+          backgroundColor: rgba,
         }}
       >
         <GuessComp

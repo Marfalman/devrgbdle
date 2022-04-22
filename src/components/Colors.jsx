@@ -1,11 +1,11 @@
 //converted from hex array originally from here: https://gist.github.com/mucar/3898821
 //272 colors, will need more eventually
 export const colors = [
-  "rgba(152,107,83,1)",
   "rgba(105,149,186,1)",
   "rgba(225,69,186,1)",
   "rgba(12,211,109,1)",
   "rgba(215,10,156,1)",
+  "rgba(152,107,83,1)",
   "rgba(86,108,160,1)",
   "rgba(242,5,230,1)",
   "rgba(210,152,226,1)",

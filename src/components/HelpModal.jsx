@@ -9,6 +9,8 @@ import {
 } from "@mui/material/";
 import CloseIcon from "@mui/icons-material/Close";
 
+import StaticGuess from "./StaticGuess";
+
 export default function HelpModal(props) {
   const handleClose = () => props.passModalOpen(false);
 
@@ -71,7 +73,20 @@ export default function HelpModal(props) {
           <Typography style={{ fontWeight: "bold" }} sx={typographyStyle}>
             Examples
           </Typography>
-          PUT THE STATIC GUESSES HERE
+          <div
+            style={{
+              width: "100%",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "flex-start",
+            }}
+          >
+            <StaticGuess colors={[255, 0, 0]} />
+            <StaticGuess colors={[0, 255, 0]} />
+            <StaticGuess colors={[0, 0, 255]} />
+            <StaticGuess colors={[240, 25, 190]} />
+            <StaticGuess colors={[65, 135, 130]} />
+          </div>
         </Container>
       </Box>
     </Modal>
