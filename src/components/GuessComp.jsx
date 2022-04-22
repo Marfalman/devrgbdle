@@ -5,14 +5,6 @@ export default function GuessComp(props) {
   const [labelColor, setLabelColor] = useState("#929292");
   const [inputColor, setInputColor] = useState("#2C2C2C");
 
-  const [focused, setFocused] = useState(false);
-
-  useEffect(() => {
-    if (props.focus) {
-      setFocused(true);
-    }
-  }, [props.focus]);
-
   useEffect(() => {
     if (props.bw !== "") {
       setLabelColor(props.bw);
@@ -20,14 +12,10 @@ export default function GuessComp(props) {
     }
   }, [props.bw]);
 
-  console.log(document.activeElement);
-
   return (
     <div>
-      <p>{focused ? "focus" : ""}</p>
       <Input
-        autoFocus={focused}
-        id={`${props.letter}-value`}
+        id={`${props.number}-${props.letter}-value`}
         type="number"
         sx={{
           fontSize: 40,

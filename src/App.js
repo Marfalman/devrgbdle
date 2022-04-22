@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import CssBaseline from "@mui/material/CssBaseline";
 import Logo from "./components/Logo";
 import TrueColor from "./components/TrueColor";
@@ -11,10 +11,17 @@ import { IconButton } from "@mui/material";
 function App() {
   const [modalOpen, setModalOpen] = useState(false);
   const [guessNum, setGuessNum] = useState(1);
+  const [lose, setLose] = useState(false);
 
   const openModal = () => {
     setModalOpen(true);
   };
+
+  useEffect(() => {
+    if (guessNum > 6) {
+      setLose(true);
+    }
+  }, [guessNum]);
 
   return (
     <div className="App">
@@ -33,8 +40,8 @@ function App() {
         }}
       >
         <Logo />
-        <TrueColor />
-        <Guesses num={guessNum} />
+        <TrueColor lose={lose.toString()} />
+        <Guesses num={guessNum} passGuessNo={setGuessNum} />
       </div>
     </div>
   );

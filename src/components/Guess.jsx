@@ -2,7 +2,6 @@ import React, { useState, useEffect, useContext } from "react";
 import GuessComp from "./GuessComp";
 import { TheColor } from "./TheColor";
 import ConfettiEl from "./ConfettiEl";
-import { TrapFocus } from "@mui/base";
 
 export default function Guess(props) {
   const answerColor = useContext(TheColor);
@@ -14,14 +13,6 @@ export default function Guess(props) {
   const [disableInputs, setDisableInputs] = useState(false);
   const [win, setWin] = useState(false);
   const [borderColor, setBorderColor] = useState("#CDD0D5");
-  const [focus, setFocus] = useState(false);
-
-  useEffect(() => {
-    if (props.index === props.focus) {
-      console.log("match");
-      setFocus(true);
-    }
-  }, [props.index, props.focus]);
 
   useEffect(() => {
     if (rVal < 0) {
@@ -93,6 +84,8 @@ export default function Guess(props) {
       setWin(true);
       setBorderColor(answerColor);
       props.passWin(true);
+    } else {
+      props.passGuess(props.index);
     }
   };
 
@@ -115,11 +108,11 @@ export default function Guess(props) {
       >
         <GuessComp
           letter={"R"}
+          number={props.index}
           val={rVal}
           passVal={setRVal}
           disable={disableInputs}
           bw={contrast}
-          focus={focus}
         />
         <GuessComp
           letter={"G"}
@@ -127,7 +120,6 @@ export default function Guess(props) {
           passVal={setGVal}
           disable={disableInputs}
           bw={contrast}
-          focus={false}
         />
         <GuessComp
           letter={"B"}
@@ -135,7 +127,6 @@ export default function Guess(props) {
           passVal={setBVal}
           disable={disableInputs}
           bw={contrast}
-          focus={false}
         />
         <button type="submit" style={{ display: "none" }}>
           Submit
