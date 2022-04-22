@@ -1,7 +1,5 @@
 import React, { useState } from "react";
-
 import CssBaseline from "@mui/material/CssBaseline";
-
 import Logo from "./components/Logo";
 import TrueColor from "./components/TrueColor";
 import Guesses from "./components/Guesses";
@@ -12,6 +10,7 @@ import { IconButton } from "@mui/material";
 
 function App() {
   const [modalOpen, setModalOpen] = useState(false);
+  const [guessNum, setGuessNum] = useState(1);
 
   const openModal = () => {
     setModalOpen(true);
@@ -34,9 +33,8 @@ function App() {
         }}
       >
         <Logo />
-
         <TrueColor />
-        <Guesses />
+        <Guesses num={guessNum} />
       </div>
     </div>
   );
