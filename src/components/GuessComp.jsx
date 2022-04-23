@@ -26,6 +26,11 @@ export default function GuessComp(props) {
             color: labelColor,
             WebkitTextFillColor: labelColor,
           },
+          "& .MuiInput-input": {
+            "&::-webkit-outer-spin-button, &::-webkit-inner-spin-button": {
+              "-webkit-appearance": "none",
+            },
+          },
         }}
         startAdornment={
           <InputAdornment position="start">

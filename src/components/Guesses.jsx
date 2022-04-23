@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Guess from "./Guess";
+import { findFocus } from "../functions/FindFocus";
 
 export default function Guesses(props) {
   const [gameOver, setGameOver] = useState(false);
@@ -9,14 +10,8 @@ export default function Guesses(props) {
   };
 
   useEffect(() => {
-    const findFocus = () => {
-      const letter = "R";
-      const number = props.num;
-      const focusEl = document.getElementById(`${number}-${letter}-value`);
-      focusEl.focus();
-    };
     if (props.num <= 6) {
-      findFocus();
+      findFocus(props.num);
     }
   }, [props.num]);
 

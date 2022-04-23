@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from "react";
 import GuessComp from "./GuessComp";
 import { TheColor } from "./TheColor";
 import ConfettiEl from "./ConfettiEl";
+import { findFocus } from "../functions/FindFocus";
 
 export default function Guess(props) {
   const answerColor = useContext(TheColor);
@@ -38,8 +39,18 @@ export default function Guess(props) {
   useEffect(() => {
     if (props.done) {
       setDisableInputs(true);
+    } else if (props.index !== props.focus) {
+      setDisableInputs(true);
+    } else if (props.index === props.focus && !props.done) {
+      setDisableInputs(false);
     }
-  }, [props.done]);
+  }, [props]);
+
+  useEffect(() => {
+    if (props.focus <= 6) {
+      findFocus(props.focus);
+    }
+  }, [disableInputs, props.focus]);
 
   const onFormSubmit = async (e) => {
     e.preventDefault();

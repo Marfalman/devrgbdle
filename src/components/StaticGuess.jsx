@@ -1,6 +1,5 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect } from "react";
 import GuessComp from "./GuessComp";
-import { TheColor } from "./TheColor";
 
 export default function StaticGuess(props) {
   const [rgba, setRgba] = useState("");
