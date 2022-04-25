@@ -3,6 +3,7 @@ import GuessComp from "./GuessComp";
 import { TheColor } from "./TheColor";
 import ConfettiEl from "./ConfettiEl";
 import { findFocus } from "../functions/FindFocus";
+import { calculateContrast } from "../functions/CalculateContrast";
 
 export default function Guess(props) {
   const answerColor = useContext(TheColor);
@@ -63,31 +64,10 @@ export default function Guess(props) {
       const rgb = `rgba(${rVal}, ${gVal}, ${bVal}, 1)`;
       setRgb(rgb);
       setDisableInputs(true);
-      calculateContrast();
+      const contrastVal = calculateContrast([rVal, bVal, gVal]);
+      setContrast(contrastVal);
       resolve(rgb);
     });
-  };
-
-  const calculateContrast = () => {
-    //from here: https://stackoverflow.com/questions/3942878/how-to-decide-font-color-in-white-or-black-depending-on-background-color
-    const rgbArr = [rVal, bVal, gVal];
-    const adjArr = [];
-    rgbArr.forEach((color) => {
-      color = color / 255;
-      if (color <= 0.03928) {
-        color = color / 12.92;
-      } else {
-        color = ((color + 0.055) / 1.055) ^ 2.4;
-      }
-      adjArr.push(color);
-    });
-    let luminance =
-      0.2126 * adjArr[0] + 0.7152 * adjArr[1] + 0.0722 * adjArr[2];
-    if (luminance > 0.179) {
-      setContrast("black");
-    } else {
-      setContrast("white");
-    }
   };
 
   const matchColor = (color) => {
