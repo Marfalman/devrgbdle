@@ -4,6 +4,7 @@ import Logo from "./components/Logo";
 import Answer from "./components/Answer";
 import Guesses from "./components/Guesses";
 import HelpModal from "./components/HelpModal";
+import Keypad from "./components/Keypad";
 
 import HelpIcon from "@mui/icons-material/Help";
 import { IconButton } from "@mui/material";
