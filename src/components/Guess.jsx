@@ -146,14 +146,11 @@ export default function Guess(props) {
           disable={disableInputs}
           bw={contrast}
         />
-        <Button
-          type="submit"
-          variant="contained"
-          color="grey"
-          className={classes.enterBtn}
-        >
-          Submit
-        </Button>
+        <div className={classes.enterBtn}>
+          <Button type="submit" variant="contained" color="grey">
+            Submit
+          </Button>
+        </div>
       </div>
       <ConfettiEl confetti={win} />
     </form>
