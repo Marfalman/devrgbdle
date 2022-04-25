@@ -55,8 +55,22 @@ export default function Guess(props) {
 
   const onFormSubmit = async (e) => {
     e.preventDefault();
-    var newRGB = await setField();
-    matchColor(newRGB);
+    var validated = await validateForm();
+    if (validated) {
+      var newRGB = await setField();
+      matchColor(newRGB);
+    }
+  };
+
+  const validateForm = async () => {
+    if (!rVal || !gVal || !bVal) {
+      setBorderColor("red");
+      findFocus(props.focus);
+      return false;
+    } else {
+      setBorderColor("#CDD0D5");
+      return true;
+    }
   };
 
   const setField = async function () {
