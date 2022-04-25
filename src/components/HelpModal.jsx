@@ -22,6 +22,7 @@ export default function HelpModal(props) {
     height: "100%",
     bgcolor: "white",
     outline: 0,
+    overflow: "scroll",
   };
 
   const typographyStyle = {
