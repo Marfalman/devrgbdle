@@ -1,16 +1,29 @@
 import React, { useState, useEffect, useContext } from "react";
+import { makeStyles } from "@mui/styles";
+import { Button } from "@mui/material";
 import GuessComp from "./GuessComp";
 import { TheColor } from "./TheColor";
 import ConfettiEl from "./ConfettiEl";
 import { findFocus } from "../functions/FindFocus";
 import { calculateContrast } from "../functions/CalculateContrast";
 
+const useStyles = makeStyles({
+  enterBtn: {
+    display: "none",
+    "@media (max-width: 780px)": {
+      display: "block",
+    },
+  },
+});
+
 export default function Guess(props) {
+  const classes = useStyles();
+
   const answerColor = useContext(TheColor);
   const [rVal, setRVal] = useState("");
   const [gVal, setGVal] = useState("");
   const [bVal, setBVal] = useState("");
-  const [rgb, setRgb] = useState("rgba(255, 255, 255, 1)");
+  const [rgb, setRgb] = useState("rgba(255,255,255,1)");
   const [contrast, setContrast] = useState("");
   const [disableInputs, setDisableInputs] = useState(false);
   const [win, setWin] = useState(false);
@@ -75,7 +88,7 @@ export default function Guess(props) {
 
   const setField = async function () {
     return new Promise((resolve) => {
-      const rgb = `rgba(${rVal}, ${gVal}, ${bVal}, 1)`;
+      const rgb = `rgba(${rVal},${gVal},${bVal},1)`;
       setRgb(rgb);
       setDisableInputs(true);
       const contrastVal = calculateContrast([rVal, bVal, gVal]);
@@ -133,9 +146,14 @@ export default function Guess(props) {
           disable={disableInputs}
           bw={contrast}
         />
-        <button type="submit" style={{ display: "none" }}>
+        <Button
+          type="submit"
+          variant="contained"
+          color="grey"
+          className={classes.enterBtn}
+        >
           Submit
-        </button>
+        </Button>
       </div>
       <ConfettiEl confetti={win} />
     </form>
