@@ -20,6 +20,7 @@ export default function Guess(props) {
   const classes = useStyles();
 
   const answerColor = useContext(TheColor);
+
   const [rVal, setRVal] = useState("");
   const [gVal, setGVal] = useState("");
   const [bVal, setBVal] = useState("");
@@ -28,6 +29,7 @@ export default function Guess(props) {
   const [disableInputs, setDisableInputs] = useState(false);
   const [win, setWin] = useState(false);
   const [borderColor, setBorderColor] = useState("#CDD0D5");
+  const [close, setClose] = useState({ R: "null", G: "null", B: "null" });
 
   useEffect(() => {
     if (rVal < 0) {
@@ -72,6 +74,7 @@ export default function Guess(props) {
     if (validated) {
       var newRGB = await setField();
       matchColor(newRGB);
+      checkComponents(newRGB);
     }
   };
 
@@ -107,6 +110,34 @@ export default function Guess(props) {
     }
   };
 
+  const checkComponents = (color) => {
+    const correctSplit = answerColor.split("(").pop();
+    const correctArr = correctSplit.split(",");
+    const threshold = 10;
+    const answerArr = color.toString().split("(").pop().split(",");
+    const closeObj = close;
+    for (let i = 0; i < 3; i++) {
+      const corrLetter = ["R", "G", "B"];
+      const correctEl = correctArr[i];
+      const answerEl = answerArr[i];
+      const closeTo = correctEl - answerEl;
+      const absClose = Math.abs(closeTo);
+      if (absClose <= threshold) {
+        if (closeTo === 0) {
+          closeObj[corrLetter[i]] = "correct";
+          console.log("correct");
+        } else if (closeTo < 0) {
+          closeObj[corrLetter[i]] = "down";
+          console.log("down");
+        } else if (closeTo > 0) {
+          closeObj[corrLetter[i]] = "up";
+          console.log("up");
+        }
+      }
+    }
+    setClose(closeObj);
+  };
+
   return (
     <form
       onSubmit={onFormSubmit}
@@ -131,6 +162,7 @@ export default function Guess(props) {
           passVal={setRVal}
           disable={disableInputs}
           bw={contrast}
+          closer={close.R}
         />
         <GuessComp
           letter={"G"}
@@ -138,6 +170,7 @@ export default function Guess(props) {
           passVal={setGVal}
           disable={disableInputs}
           bw={contrast}
+          closer={close.G}
         />
         <GuessComp
           letter={"B"}
@@ -145,6 +178,7 @@ export default function Guess(props) {
           passVal={setBVal}
           disable={disableInputs}
           bw={contrast}
+          closer={close.B}
         />
         <div className={classes.enterBtn}>
           <Button type="submit" variant="contained" color="grey">
