@@ -7,7 +7,6 @@ import CheckIcon from "@mui/icons-material/Check";
 export default function GuessComp(props) {
   const [labelColor, setLabelColor] = useState("#929292");
   const [inputColor, setInputColor] = useState("#2C2C2C");
-  console.log(props.bw);
 
   useEffect(() => {
     if (props.bw !== "") {
@@ -15,10 +14,6 @@ export default function GuessComp(props) {
       setInputColor(props.bw);
     }
   }, [props.bw]);
-
-  useEffect(() => {
-    console.log(props.closer);
-  }, [props.closer]);
 
   return (
     <div>

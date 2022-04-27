@@ -125,13 +125,10 @@ export default function Guess(props) {
       if (absClose <= threshold) {
         if (closeTo === 0) {
           closeObj[corrLetter[i]] = "correct";
-          console.log("correct");
         } else if (closeTo < 0) {
           closeObj[corrLetter[i]] = "down";
-          console.log("down");
         } else if (closeTo > 0) {
           closeObj[corrLetter[i]] = "up";
-          console.log("up");
         }
       }
     }
