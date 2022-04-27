@@ -6,6 +6,7 @@ import { TheColor } from "./TheColor";
 import ConfettiEl from "./ConfettiEl";
 import { findFocus } from "../functions/FindFocus";
 import { calculateContrast } from "../functions/CalculateContrast";
+import MouseOverPopover from "./MouseOverPopover";
 
 const useStyles = makeStyles({
   enterBtn: {
@@ -139,6 +140,7 @@ export default function Guess(props) {
     <form
       onSubmit={onFormSubmit}
       style={{ display: "flex", flexDirection: "column", alignItems: "center" }}
+      id={`guess-${props.index}`}
     >
       <div
         style={{
@@ -147,7 +149,7 @@ export default function Guess(props) {
           alignItems: "center",
           width: 384,
           height: 70,
-          border: `3px solid ${borderColor}`,
+          border: `${disableInputs ? 3 : 4}px solid ${borderColor}`,
           margin: "6px 0",
           backgroundColor: rgb,
         }}
@@ -177,12 +179,14 @@ export default function Guess(props) {
           bw={contrast}
           closer={close.B}
         />
+        <MouseOverPopover />
         <div className={classes.enterBtn}>
           <Button type="submit" variant="contained" color="grey">
             Submit
           </Button>
         </div>
       </div>
+
       <ConfettiEl confetti={win} />
     </form>
   );

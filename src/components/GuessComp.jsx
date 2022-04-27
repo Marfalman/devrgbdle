@@ -7,7 +7,6 @@ import CheckIcon from "@mui/icons-material/Check";
 export default function GuessComp(props) {
   const [labelColor, setLabelColor] = useState("#929292");
   const [inputColor, setInputColor] = useState("#2C2C2C");
-  //test comment
 
   useEffect(() => {
     if (props.bw !== "") {
@@ -38,11 +37,6 @@ export default function GuessComp(props) {
         }}
         startAdornment={
           <InputAdornment position="start">
-            <p style={{ fontSize: 25, color: labelColor }}>{props.letter}</p>
-          </InputAdornment>
-        }
-        endAdornment={
-          <InputAdornment position="end">
             {props.closer === "up" && (
               <ArrowUpwardIcon sx={{ color: props.bw }} />
             )}
@@ -52,6 +46,7 @@ export default function GuessComp(props) {
             {props.closer === "correct" && (
               <CheckIcon sx={{ color: props.bw }} />
             )}
+            <p style={{ fontSize: 25, color: labelColor }}>{props.letter}</p>
           </InputAdornment>
         }
         inputProps={{ maxLength: 3, min: 0, max: 255 }}

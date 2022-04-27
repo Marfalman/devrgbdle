@@ -4,6 +4,7 @@ import Logo from "./components/Logo";
 import Answer from "./components/Answer";
 import Guesses from "./components/Guesses";
 import HelpModal from "./components/HelpModal";
+import HintBtn from "./components/HintBtn";
 
 import HelpIcon from "@mui/icons-material/Help";
 import { IconButton } from "@mui/material";
@@ -42,6 +43,7 @@ function App() {
         <Logo />
         <Answer lose={lose.toString()} />
         <Guesses num={guessNum} passGuessNo={setGuessNum} />
+        {/* <HintBtn num={guessNum} /> */}
       </div>
     </div>
   );
