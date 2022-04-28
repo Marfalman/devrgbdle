@@ -5,8 +5,9 @@ import { findFocus } from "../functions/FindFocus";
 export default function Guesses(props) {
   const [gameOver, setGameOver] = useState(false);
 
-  const logGuessNo = (num) => {
-    props.passGuessNo(num + 1);
+  const logGuessNo = (guess) => {
+    props.passGuessNo(guess.num + 1);
+    console.log(guess.info);
   };
 
   useEffect(() => {

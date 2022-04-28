@@ -4,15 +4,15 @@ import Logo from "./components/Logo";
 import Answer from "./components/Answer";
 import Guesses from "./components/Guesses";
 import HelpModal from "./components/HelpModal";
-import HintBtn from "./components/HintBtn";
 
 import HelpIcon from "@mui/icons-material/Help";
 import { IconButton } from "@mui/material";
 
 function App() {
-  const [modalOpen, setModalOpen] = useState(true);
+  const [modalOpen, setModalOpen] = useState(false);
   const [guessNum, setGuessNum] = useState(1);
   const [lose, setLose] = useState(false);
+  const [guesses, setGuesses] = useState([]);
 
   const openModal = () => {
     setModalOpen(true);
@@ -42,7 +42,11 @@ function App() {
       >
         <Logo />
         <Answer lose={lose.toString()} />
-        <Guesses num={guessNum} passGuessNo={setGuessNum} />
+        <Guesses
+          num={guessNum}
+          passGuessNo={setGuessNum}
+          passGuessInfo={setGuesses}
+        />
         {/* <HintBtn num={guessNum} /> */}
       </div>
     </div>

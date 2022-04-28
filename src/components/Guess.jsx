@@ -109,7 +109,10 @@ export default function Guess(props) {
       setBorderColor(answerColor);
       props.passWin(true);
     } else {
-      props.passGuess(props.index);
+      props.passGuess({
+        num: props.index,
+        info: { sym: close, hints: showHints },
+      });
     }
   };
 
