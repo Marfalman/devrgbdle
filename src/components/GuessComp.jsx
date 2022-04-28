@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { InputAdornment, Input } from "@mui/material/";
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
+import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
+import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import CheckIcon from "@mui/icons-material/Check";
 
 export default function GuessComp(props) {
@@ -38,14 +40,24 @@ export default function GuessComp(props) {
         startAdornment={
           <InputAdornment position="start">
             {props.closer === "up" && (
-              <ArrowUpwardIcon sx={{ color: props.bw }} />
+              <ArrowDropUpIcon sx={{ color: props.bw }} />
             )}
             {props.closer === "down" && (
-              <ArrowDownwardIcon sx={{ color: props.bw }} />
+              <ArrowDropDownIcon sx={{ color: props.bw }} />
             )}
             {props.closer === "correct" && (
               <CheckIcon sx={{ color: props.bw }} />
             )}
+            {props.showHint &&
+              props.hint === "up" &&
+              props.closer === "null" && (
+                <ArrowUpwardIcon sx={{ color: props.bw }} />
+              )}
+            {props.showHint &&
+              props.hint === "down" &&
+              props.closer === "null" && (
+                <ArrowDownwardIcon sx={{ color: props.bw }} />
+              )}
             <p style={{ fontSize: 25, color: labelColor }}>{props.letter}</p>
           </InputAdornment>
         }
