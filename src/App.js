@@ -10,7 +10,7 @@ import HelpIcon from "@mui/icons-material/Help";
 import { IconButton } from "@mui/material";
 
 function App() {
-  const [modalOpen, setModalOpen] = useState(false);
+  const [modalOpen, setModalOpen] = useState(true);
   const [guessNum, setGuessNum] = useState(1);
   const [lose, setLose] = useState(false);
 
