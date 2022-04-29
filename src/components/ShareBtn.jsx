@@ -1,11 +1,13 @@
 import React from "react";
 import { Button } from "@mui/material";
+import { TheDay } from "./TheColor";
 
 export default function ShareBtn(props) {
+  const dayNo = TheDay._currentValue;
   const copyAns = () => {
     const finalArr = props.final;
     const stringArr = [];
-    stringArr.push(`RGBdle [number]: ${props.final.length}/6 \n`);
+    stringArr.push(`RGBdle ${dayNo}: ${props.final.length}/6 \n`);
     finalArr.forEach((el) => {
       const string = el.join(" ");
       stringArr.push(string);
@@ -17,14 +19,9 @@ export default function ShareBtn(props) {
 
   //from here: https://www.delftstack.com/howto/javascript/javascript-copy-to-clipboard/
   function copyToClipBoard(content) {
-    navigator.clipboard
-      .writeText(content)
-      .then(() => {
-        console.log("Text copied to clipboard...");
-      })
-      .catch((err) => {
-        console.log("Something went wrong", err);
-      });
+    navigator.clipboard.writeText(content).catch((err) => {
+      console.log("Something went wrong", err);
+    });
   }
 
   if (props.final.length > 0) {
