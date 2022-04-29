@@ -47,7 +47,6 @@ function App() {
           passGuessNo={setGuessNum}
           passGuessInfo={setGuesses}
         />
-        {/* <HintBtn num={guessNum} /> */}
       </div>
     </div>
   );

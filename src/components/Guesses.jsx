@@ -4,11 +4,26 @@ import { findFocus } from "../functions/FindFocus";
 
 export default function Guesses(props) {
   const [gameOver, setGameOver] = useState(false);
+  const [guessInfos, setGuessInfos] = useState([]);
+  const [usedHints, setUsedHints] = useState([]);
 
   const logGuessNo = (guess) => {
     props.passGuessNo(guess.num + 1);
-    console.log(guess.info);
+    const guesses = [...guessInfos];
+    guesses.push(guess.info);
+    setGuessInfos(guesses);
   };
+
+  const logHints = (hint) => {
+    const hints = [...usedHints];
+    hints.push(hint);
+    setUsedHints(hints);
+  };
+
+  useEffect(() => {
+    console.log(guessInfos);
+    console.log(usedHints);
+  }, [guessInfos, usedHints]);
 
   useEffect(() => {
     if (props.num <= 6) {
@@ -24,6 +39,7 @@ export default function Guesses(props) {
         done={gameOver}
         passWin={setGameOver}
         passGuess={logGuessNo}
+        passHints={logHints}
       />
       <Guess
         index={2}
@@ -31,6 +47,7 @@ export default function Guesses(props) {
         done={gameOver}
         passWin={setGameOver}
         passGuess={logGuessNo}
+        passHints={logHints}
       />
       <Guess
         index={3}
@@ -38,6 +55,7 @@ export default function Guesses(props) {
         done={gameOver}
         passWin={setGameOver}
         passGuess={logGuessNo}
+        passHints={logHints}
       />
       <Guess
         index={4}
@@ -45,6 +63,7 @@ export default function Guesses(props) {
         done={gameOver}
         passWin={setGameOver}
         passGuess={logGuessNo}
+        passHints={logHints}
       />
       <Guess
         index={5}
@@ -52,6 +71,7 @@ export default function Guesses(props) {
         done={gameOver}
         passWin={setGameOver}
         passGuess={logGuessNo}
+        passHints={logHints}
       />
       <Guess
         index={6}
@@ -59,6 +79,7 @@ export default function Guesses(props) {
         done={gameOver}
         passWin={setGameOver}
         passGuess={logGuessNo}
+        passHints={logHints}
       />
     </div>
   );

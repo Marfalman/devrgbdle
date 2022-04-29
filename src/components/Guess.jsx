@@ -35,6 +35,12 @@ export default function Guess(props) {
   const [showHints, setShowHints] = useState(false);
 
   useEffect(() => {
+    if (showHints) {
+      props.passHints({ index: props.index + 1, hint: true });
+    }
+  }, [showHints]); // eslint-disable-line
+
+  useEffect(() => {
     if (rVal < 0) {
       setRVal(0);
     }
@@ -111,7 +117,7 @@ export default function Guess(props) {
     } else {
       props.passGuess({
         num: props.index,
-        info: { sym: close, hints: showHints },
+        info: close,
       });
     }
   };
