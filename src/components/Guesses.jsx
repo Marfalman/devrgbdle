@@ -9,6 +9,9 @@ export default function Guesses(props) {
 
   const logGuessNo = (guess) => {
     props.passGuessNo(guess.num + 1);
+    if (guess.num === 6) {
+      setGameOver(true);
+    }
     const guesses = [...guessInfos];
     guesses.push(guess.info);
     setGuessInfos(guesses);
@@ -21,9 +24,11 @@ export default function Guesses(props) {
   };
 
   useEffect(() => {
-    console.log(guessInfos);
-    console.log(usedHints);
-  }, [guessInfos, usedHints]);
+    if (gameOver) {
+      const guessObj = { guesses: guessInfos, hints: usedHints };
+      props.passGuessInfo(guessObj);
+    }
+  }, [gameOver, guessInfos, usedHints]); //eslint-disable-line
 
   useEffect(() => {
     if (props.num <= 6) {

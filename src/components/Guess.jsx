@@ -36,7 +36,7 @@ export default function Guess(props) {
 
   useEffect(() => {
     if (showHints) {
-      props.passHints({ index: props.index + 1, hint: true });
+      props.passHints({ index: props.index, hint: true });
     }
   }, [showHints]); // eslint-disable-line
 
@@ -114,12 +114,11 @@ export default function Guess(props) {
       setWin(true);
       setBorderColor(answerColor);
       props.passWin(true);
-    } else {
-      props.passGuess({
-        num: props.index,
-        info: close,
-      });
     }
+    props.passGuess({
+      num: props.index,
+      info: close,
+    });
   };
 
   const checkComponents = (color) => {
