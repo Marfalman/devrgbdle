@@ -7,6 +7,7 @@ import ConfettiEl from "./ConfettiEl";
 import { findFocus } from "../functions/FindFocus";
 import { calculateContrast } from "../functions/CalculateContrast";
 import HintBtn from "./HintBtn";
+import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 
 const useStyles = makeStyles({
   enterBtn: {
@@ -164,7 +165,7 @@ export default function Guess(props) {
           display: "flex",
           justifyContent: "space-around",
           alignItems: "center",
-          width: 384,
+          width: "100%",
           height: 70,
           border: `${disableInputs ? 3 : 4}px solid ${borderColor}`,
           margin: "6px 0",
@@ -207,8 +208,14 @@ export default function Guess(props) {
         />
 
         <div className={classes.enterBtn}>
-          <Button type="submit" variant="contained" color="grey">
-            Submit
+          <Button
+            type="submit"
+            variant="contained"
+            color="grey"
+            size="small"
+            style={{ minWidth: "fit-content" }}
+          >
+            <ArrowForwardIosIcon fontSize="small" />
           </Button>
         </div>
       </div>

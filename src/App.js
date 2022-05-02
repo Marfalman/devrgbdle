@@ -5,6 +5,7 @@ import Answer from "./components/Answer";
 import Guesses from "./components/Guesses";
 import HelpModal from "./components/HelpModal";
 import ShareBtn from "./components/ShareBtn";
+import "./App.css";
 
 import HelpIcon from "@mui/icons-material/Help";
 import { IconButton } from "@mui/material";
@@ -42,15 +43,7 @@ function App() {
         <HelpIcon />
       </IconButton>
       <HelpModal open={modalOpen} passModalOpen={setModalOpen} />
-      <div
-        className="main"
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          margin: "auto",
-        }}
-      >
+      <div className="main">
         <Logo />
         <ShareBtn final={finalAns} />
         <Answer lose={lose.toString()} />

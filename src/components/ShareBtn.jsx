@@ -3,6 +3,8 @@ import { Button } from "@mui/material";
 import { TheDay } from "./TheColor";
 import { Popover, Typography } from "@mui/material";
 
+const url = "https://main.d2qu9x7ue9yf75.amplifyapp.com/";
+
 export default function ShareBtn(props) {
   //popover stuff
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -26,7 +28,7 @@ export default function ShareBtn(props) {
       const string = el.join(" ");
       stringArr.push(string);
     });
-    stringArr.push("\n[url here]");
+    stringArr.push(`\n${url}`);
     const finalStr = stringArr.join("\n");
     copyToClipBoard(finalStr, e);
   };

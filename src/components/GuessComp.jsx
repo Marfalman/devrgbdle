@@ -18,15 +18,17 @@ export default function GuessComp(props) {
   }, [props.bw]);
 
   return (
-    <div>
+    <div style={{ width: "100%", margin: "0 5px" }}>
       <Input
+        className="guessInput"
         id={`${props.number}-${props.letter}-value`}
         type="number"
         sx={{
-          fontSize: props.disable ? 30 : 40,
+          width: "100%",
+          fontSize: props.disable ? "150%" : "200%",
           color: inputColor,
           height: 40,
-          margin: "0 5px",
+
           "&.Mui-disabled input": {
             color: labelColor,
             WebkitTextFillColor: labelColor,
@@ -58,7 +60,7 @@ export default function GuessComp(props) {
               props.closer === "null" && (
                 <ArrowDownwardIcon sx={{ color: props.bw }} />
               )}
-            <p style={{ fontSize: 25, color: labelColor }}>{props.letter}</p>
+            <p style={{ fontSize: "75%", color: labelColor }}>{props.letter}</p>
           </InputAdornment>
         }
         inputProps={{ maxLength: 3, min: 0, max: 255 }}
