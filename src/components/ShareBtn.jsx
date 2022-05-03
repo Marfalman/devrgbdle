@@ -1,82 +1,91 @@
-import React from "react";
-import { Button } from "@mui/material";
+import React, { useState, useEffect } from "react";
+import { Button, TextareaAutosize } from "@mui/material";
 import { TheDay } from "./TheColor";
-import { Popover, Typography } from "@mui/material";
+import { Typography } from "@mui/material";
 
 const url = "https://main.d2qu9x7ue9yf75.amplifyapp.com/";
 
 export default function ShareBtn(props) {
-  //popover stuff
-  const [anchorEl, setAnchorEl] = React.useState(null);
+  const [open, setOpen] = useState(false);
+  const [shown, setShown] = useState(0);
+  const [noClipboard, setNoClipboard] = useState(false);
+  const [string, setString] = useState("");
 
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
-
-  const open = Boolean(anchorEl);
-  const id = open ? "simple-popover" : undefined;
+  useEffect(() => {
+    if (props.final.length > 0) {
+      setShown(100);
+    }
+  }, [props.final]);
 
   //day number
   const dayNo = TheDay._currentValue;
 
   //clipboard stuff
-  const copyAns = (e) => {
+  const copyAns = () => {
     const finalArr = props.final;
+    let lost = true;
+    if (finalArr.length === 6) {
+      if (
+        finalArr[5] === ["✅", "✅", "✅"] ||
+        finalArr[5] === ["✅", "✅", "✅", "💡"]
+      ) {
+        lost = false;
+      }
+    }
     const stringArr = [];
-    stringArr.push(`RGBdle ${dayNo}: ${props.final.length}/6 \n`);
+    stringArr.push(`RGBdle ${dayNo}: ${lost ? "X" : props.final.length}/6 \n`);
     finalArr.forEach((el) => {
       const string = el.join(" ");
       stringArr.push(string);
     });
     stringArr.push(`\n${url}`);
     const finalStr = stringArr.join("\n");
-    copyToClipBoard(finalStr, e);
+    setString(finalStr);
+
+    copyToClipBoard(finalStr);
   };
 
   //from here: https://www.delftstack.com/howto/javascript/javascript-copy-to-clipboard/
-  function copyToClipBoard(content, event) {
-    navigator.clipboard
-      .writeText(content)
-      .then(setAnchorEl(event.currentTarget))
-      .catch((err) => {
-        console.log("Something went wrong", err);
-      });
+  function copyToClipBoard(content) {
+    try {
+      navigator.clipboard
+        .writeText(content)
+        .then(setOpen(true))
+        .catch((err) => {
+          console.log("Something went wrong", err);
+          setNoClipboard(true);
+        });
+    } catch (error) {
+      setNoClipboard(true);
+    }
   }
 
-  if (props.final.length > 0) {
-    return (
-      <div>
-        <Button
-          variant="contained"
-          color="grey"
-          style={{ marginBottom: "1rem" }}
-          onClick={(e) => copyAns(e)}
-        >
-          Share
-        </Button>
-        <Popover
-          id={id}
-          open={open}
-          anchorEl={anchorEl}
-          onClose={handleClose}
-          anchorOrigin={{
-            vertical: "bottom",
-            horizontal: "center",
-          }}
-          transformOrigin={{
-            vertical: "top",
-            horizontal: "center",
-          }}
-        >
-          <Typography sx={{ p: 2 }}>Content copied to clipboard.</Typography>
-        </Popover>
-      </div>
-    );
-  } else {
-    return (
-      <Button disabled style={{ opacity: 0, marginBottom: "1rem" }}>
-        Nothing
+  return (
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        alignItems: "center",
+        opacity: shown,
+      }}
+    >
+      <Button
+        variant="contained"
+        color="grey"
+        onClick={copyAns}
+        onTouchEnd={copyAns}
+        style={{ cursor: "pointer" }}
+      >
+        Share
       </Button>
-    );
-  }
+      <Typography sx={{ p: 1 }}>
+        {open && "Content copied to clipboard."}
+        {!open && !noClipboard && "Thanks for playing."}
+      </Typography>
+      {noClipboard && (
+        <TextareaAutosize value={string} style={{ marginBottom: ".5rem" }} />
+      )}
+    </div>
+  );
 }

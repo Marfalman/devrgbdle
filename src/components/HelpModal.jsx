@@ -47,7 +47,7 @@ export default function HelpModal(props) {
         <IconButton onClick={handleClose}>
           <CloseIcon />
         </IconButton>
-        <Container style={{ width: 575 }}>
+        <Container style={{ maxWidth: 575 }}>
           <Typography
             id="modal-modal-title"
             variant="h6"
