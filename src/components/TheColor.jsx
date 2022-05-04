@@ -1,5 +1,5 @@
 import { createContext } from "react";
-import { colors } from "./Colors";
+import { colors } from "../secrets/colors/Colors";
 
 //THIS VAR WOULD NEED TO BE UPDATED
 function daysBetween() {
@@ -43,7 +43,6 @@ function pickColor() {
 
 export const TheColor = createContext(pickColor());
 export const TheDay = createContext(daysBetween());
-
 
 // export const TheColor = createContext("rgba(205,130,200,1)");
 // export const TheColor = createContext("rgba(0,0,0,1)");
