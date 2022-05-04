@@ -34,7 +34,7 @@ const Answer = (props) => {
 
   if (props.lose === "false") {
     return (
-      <div>
+      <div style={{ margin: "auto", width: "384px" }}>
         <canvas ref={canvasRef} {...props} width="384" height="70" />
       </div>
     );

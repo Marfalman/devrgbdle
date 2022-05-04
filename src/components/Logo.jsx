@@ -10,7 +10,7 @@ export default function Logo() {
         fontSize: 40,
         color: "#9C9C9C",
         textAlign: "center",
-        marginBottom: "3rem",
+        marginBottom: "1rem",
         marginTop: "1rem",
       }}
     >

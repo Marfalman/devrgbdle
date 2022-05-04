@@ -1,0 +1,14 @@
+.main {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  margin: 0 auto;
+  width: 384px;
+}
+
+@media only screen and (max-width: 400px) {
+  .main {
+    width: 100%;
+    margin: 0 2px;
+  }
+}

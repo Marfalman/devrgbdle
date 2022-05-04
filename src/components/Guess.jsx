@@ -6,6 +6,8 @@ import { TheColor } from "./TheColor";
 import ConfettiEl from "./ConfettiEl";
 import { findFocus } from "../functions/FindFocus";
 import { calculateContrast } from "../functions/CalculateContrast";
+import HintBtn from "./HintBtn";
+import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 
 const useStyles = makeStyles({
   enterBtn: {
@@ -30,6 +32,14 @@ export default function Guess(props) {
   const [win, setWin] = useState(false);
   const [borderColor, setBorderColor] = useState("#CDD0D5");
   const [close, setClose] = useState({ R: "null", G: "null", B: "null" });
+  const [hints, setHints] = useState({ R: "null", G: "null", B: "null" });
+  const [showHints, setShowHints] = useState(false);
+
+  useEffect(() => {
+    if (showHints) {
+      props.passHints({ index: props.index, hint: true });
+    }
+  }, [showHints]); // eslint-disable-line
 
   useEffect(() => {
     if (rVal < 0) {
@@ -105,9 +115,11 @@ export default function Guess(props) {
       setWin(true);
       setBorderColor(answerColor);
       props.passWin(true);
-    } else {
-      props.passGuess(props.index);
     }
+    props.passGuess({
+      num: props.index,
+      info: close,
+    });
   };
 
   const checkComponents = (color) => {
@@ -116,12 +128,18 @@ export default function Guess(props) {
     const threshold = 10;
     const answerArr = color.toString().split("(").pop().split(",");
     const closeObj = close;
+    const hintObj = hints;
     for (let i = 0; i < 3; i++) {
       const corrLetter = ["R", "G", "B"];
       const correctEl = correctArr[i];
       const answerEl = answerArr[i];
       const closeTo = correctEl - answerEl;
       const absClose = Math.abs(closeTo);
+      if (closeTo < 0) {
+        hintObj[corrLetter[i]] = "down";
+      } else if (closeTo > 0) {
+        hintObj[corrLetter[i]] = "up";
+      }
       if (absClose <= threshold) {
         if (closeTo === 0) {
           closeObj[corrLetter[i]] = "correct";
@@ -133,25 +151,30 @@ export default function Guess(props) {
       }
     }
     setClose(closeObj);
+    setHints(hintObj);
   };
 
   return (
     <form
       onSubmit={onFormSubmit}
       style={{ display: "flex", flexDirection: "column", alignItems: "center" }}
+      id={`guess-${props.index}`}
     >
       <div
         style={{
           display: "flex",
           justifyContent: "space-around",
           alignItems: "center",
-          width: 384,
+          width: "100%",
           height: 70,
-          border: `3px solid ${borderColor}`,
+          border: `${disableInputs ? 3 : 4}px solid ${borderColor}`,
           margin: "6px 0",
           backgroundColor: rgb,
         }}
       >
+        {props.index === props.focus - 1 && props.index < 6 && (
+          <HintBtn passChildHint={setShowHints} />
+        )}
         <GuessComp
           letter={"R"}
           number={props.index}
@@ -160,6 +183,8 @@ export default function Guess(props) {
           disable={disableInputs}
           bw={contrast}
           closer={close.R}
+          hint={hints.R}
+          showHint={showHints}
         />
         <GuessComp
           letter={"G"}
@@ -168,6 +193,8 @@ export default function Guess(props) {
           disable={disableInputs}
           bw={contrast}
           closer={close.G}
+          hint={hints.G}
+          showHint={showHints}
         />
         <GuessComp
           letter={"B"}
@@ -176,13 +203,23 @@ export default function Guess(props) {
           disable={disableInputs}
           bw={contrast}
           closer={close.B}
+          hint={hints.B}
+          showHint={showHints}
         />
+
         <div className={classes.enterBtn}>
-          <Button type="submit" variant="contained" color="grey">
-            Submit
+          <Button
+            type="submit"
+            variant="contained"
+            color="grey"
+            size="small"
+            style={{ minWidth: "fit-content" }}
+          >
+            <ArrowForwardIosIcon fontSize="small" />
           </Button>
         </div>
       </div>
+
       <ConfettiEl confetti={win} />
     </form>
   );

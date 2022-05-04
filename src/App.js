@@ -4,18 +4,31 @@ import Logo from "./components/Logo";
 import Answer from "./components/Answer";
 import Guesses from "./components/Guesses";
 import HelpModal from "./components/HelpModal";
+import ShareBtn from "./components/ShareBtn";
+import "./App.css";
 
 import HelpIcon from "@mui/icons-material/Help";
 import { IconButton } from "@mui/material";
+
+import { displayGuesses } from "./functions/DisplayGuesses";
 
 function App() {
   const [modalOpen, setModalOpen] = useState(false);
   const [guessNum, setGuessNum] = useState(1);
   const [lose, setLose] = useState(false);
+  const [guesses, setGuesses] = useState({});
+  const [finalAns, setFinalAns] = useState([]);
 
   const openModal = () => {
     setModalOpen(true);
   };
+
+  useEffect(() => {
+    if (guesses) {
+      const guessStr = displayGuesses(guesses);
+      setFinalAns(guessStr);
+    }
+  }, [guesses]);
 
   useEffect(() => {
     if (guessNum > 6) {
@@ -30,18 +43,15 @@ function App() {
         <HelpIcon />
       </IconButton>
       <HelpModal open={modalOpen} passModalOpen={setModalOpen} />
-      <div
-        className="main"
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          margin: "auto",
-        }}
-      >
+      <div className="main">
         <Logo />
+        <ShareBtn final={finalAns} />
         <Answer lose={lose.toString()} />
-        <Guesses num={guessNum} passGuessNo={setGuessNum} />
+        <Guesses
+          num={guessNum}
+          passGuessNo={setGuessNum}
+          passGuessInfo={setGuesses}
+        />
       </div>
     </div>
   );
