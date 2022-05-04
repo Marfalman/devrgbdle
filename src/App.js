@@ -14,7 +14,7 @@ import { displayGuesses } from "./functions/DisplayGuesses";
 
 function App() {
   const [modalOpen, setModalOpen] = useState(false);
-  const [guessNum, setGuessNum] = useState(6);
+  const [guessNum, setGuessNum] = useState(1);
   const [lose, setLose] = useState(false);
   const [guesses, setGuesses] = useState({});
   const [finalAns, setFinalAns] = useState([]);
