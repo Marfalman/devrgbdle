@@ -5,7 +5,7 @@ It's Wordle, but for colors! Specifically, for RGB values.
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Spoilers!!
-If you want to spoil the game for yourself, I've tucked away the colors array in a subfolder. In the future I want this to be in a database so people can't cheat ;P
+If you want to spoil the game for yourself, I've tucked away the colors array in a subfolder. In the future I want this to be in a database so people can't cheat.
 
 ## About
 I made this as an exercise for myself to cement some knowledge about React and Material UI, as well as to try out hosting a React app on AWS Amplify. 
