@@ -5,10 +5,8 @@ import Answer from "./components/Answer";
 import Guesses from "./components/Guesses";
 import HelpModal from "./components/HelpModal";
 import ShareBtn from "./components/ShareBtn";
+import Icons from "./components/Icons";
 import "./App.css";
-
-import HelpIcon from "@mui/icons-material/Help";
-import { IconButton } from "@mui/material";
 
 import { displayGuesses } from "./functions/DisplayGuesses";
 
@@ -18,10 +16,6 @@ function App() {
   const [lose, setLose] = useState(false);
   const [guesses, setGuesses] = useState({});
   const [finalAns, setFinalAns] = useState([]);
-
-  const openModal = () => {
-    setModalOpen(true);
-  };
 
   useEffect(() => {
     if (guesses) {
@@ -39,9 +33,7 @@ function App() {
   return (
     <div className="App">
       <CssBaseline />
-      <IconButton style={{ position: "fixed" }} onClick={openModal}>
-        <HelpIcon />
-      </IconButton>
+      <Icons passOpenModal={setModalOpen} />
       <HelpModal open={modalOpen} passModalOpen={setModalOpen} />
       <div className="main">
         <Logo />
