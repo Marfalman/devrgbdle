@@ -1,5 +1,5 @@
 # RGBdle
-**URL**: [url here]
+**URL**: https://www.rgbdle.page/
 
 It's Wordle, but for colors! Specifically, for RGB values.
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
