@@ -3,7 +3,7 @@ import { Button, TextareaAutosize } from "@mui/material";
 import { TheDay } from "./TheColor";
 import { Typography } from "@mui/material";
 
-const url = "https://main.d2qu9x7ue9yf75.amplifyapp.com/";
+const url = "https://www.rgbdle.page/";
 
 export default function ShareBtn(props) {
   const [open, setOpen] = useState(false);
