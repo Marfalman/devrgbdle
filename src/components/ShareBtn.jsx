@@ -22,16 +22,15 @@ export default function ShareBtn(props) {
 
   //clipboard stuff
   const copyAns = () => {
+    //I NEED A BETTER WAY OF DOING THIS
     const finalArr = props.final;
     let lost = true;
     if (finalArr.length === 6) {
-      if (
-        finalArr[5] === ["✅", "✅", "✅"] ||
-        finalArr[5] === ["✅", "✅", "✅", "💡"]
-      ) {
+      const finalAnsStr = finalArr[5].join("");
+      if (finalAnsStr === "✅✅✅" || finalAnsStr === "✅✅✅💡") {
         lost = false;
       }
-    }
+    } else lost = false;
     const stringArr = [];
     stringArr.push(`RGBdle ${dayNo}: ${lost ? "X" : props.final.length}/6 \n`);
     finalArr.forEach((el) => {
