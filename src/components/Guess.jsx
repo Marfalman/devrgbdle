@@ -8,6 +8,7 @@ import { findFocus } from "../functions/FindFocus";
 import { calculateContrast } from "../functions/CalculateContrast";
 import HintBtn from "./HintBtn";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
+import BWToggle from "./BWToggle";
 
 const useStyles = makeStyles({
   enterBtn: {
@@ -218,8 +219,10 @@ export default function Guess(props) {
             <ArrowForwardIosIcon fontSize="small" />
           </Button>
         </div>
+        {props.index <= props.focus - 1 && (
+          <BWToggle passContrast={setContrast} contrast={contrast} />
+        )}
       </div>
-
       <ConfettiEl confetti={win} />
     </form>
   );
