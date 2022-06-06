@@ -7,8 +7,6 @@ import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import CheckIcon from "@mui/icons-material/Check";
 
 export default function GuessComp(props) {
-  //props: letter (rgb), closeness, bw (contrast), number (the number guess this comp lives in), currNo (current guess number)
-
   const [labelColor, setLabelColor] = useState("#929292");
   const [inputColor, setInputColor] = useState("#2C2C2C");
 
@@ -20,14 +18,17 @@ export default function GuessComp(props) {
   }, [props.bw]);
 
   return (
-    <div className="guessComp">
+    <div style={{ width: "100%", margin: "0 5px" }}>
       <Input
         className="guessInput"
         id={`${props.number}-${props.letter}-value`}
         type="number"
         sx={{
-          fontSize: props.number ? "150%" : "200%",
+          width: "100%",
+          fontSize: props.disable ? "150%" : "200%",
           color: inputColor,
+          height: 40,
+
           "&.Mui-disabled input": {
             color: labelColor,
             WebkitTextFillColor: labelColor,
@@ -40,7 +41,7 @@ export default function GuessComp(props) {
         }}
         startAdornment={
           <InputAdornment position="start">
-            {/* {props.closer === "up" && (
+            {props.closer === "up" && (
               <ArrowDropUpIcon sx={{ color: props.bw }} />
             )}
             {props.closer === "down" && (
@@ -58,7 +59,7 @@ export default function GuessComp(props) {
               props.hint === "down" &&
               props.closer === "null" && (
                 <ArrowDownwardIcon sx={{ color: props.bw }} />
-              )} */}
+              )}
             <p style={{ fontSize: "75%", color: labelColor }}>{props.letter}</p>
           </InputAdornment>
         }

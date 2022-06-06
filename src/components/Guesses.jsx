@@ -1,91 +1,16 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import Guess from "./Guess";
-import { findFocus } from "../functions/FindFocus";
 
 export default function Guesses(props) {
-  const [gameOver, setGameOver] = useState(false);
-  const [guessInfos, setGuessInfos] = useState([]);
-  const [usedHints, setUsedHints] = useState([]);
+  //props is used to pass info to/from Guess
 
-  const logGuessNo = (guess) => {
-    props.passGuessNo(guess.num + 1);
-    if (guess.num === 6) {
-      setGameOver(true);
-    }
-    const guesses = [...guessInfos];
-    guesses.push(guess.info);
-    setGuessInfos(guesses);
-  };
+  var guessNo = 6;
 
-  const logHints = (hint) => {
-    const hints = [...usedHints];
-    hints.push(hint);
-    setUsedHints(hints);
-  };
+  var guesses = [];
 
-  useEffect(() => {
-    if (gameOver) {
-      const guessObj = { guesses: guessInfos, hints: usedHints };
-      props.passGuessInfo(guessObj);
-    }
-  }, [gameOver, guessInfos, usedHints]); //eslint-disable-line
+  for (var i = 0; i < guessNo; i++) {
+    guesses.push(<Guess currNo={props.number} number={i} key={i} />);
+  }
 
-  useEffect(() => {
-    if (props.num <= 6) {
-      findFocus(props.num);
-    }
-  }, [props.num]);
-
-  return (
-    <div>
-      <Guess
-        index={1}
-        focus={props.num}
-        done={gameOver}
-        passWin={setGameOver}
-        passGuess={logGuessNo}
-        passHints={logHints}
-      />
-      <Guess
-        index={2}
-        focus={props.num}
-        done={gameOver}
-        passWin={setGameOver}
-        passGuess={logGuessNo}
-        passHints={logHints}
-      />
-      <Guess
-        index={3}
-        focus={props.num}
-        done={gameOver}
-        passWin={setGameOver}
-        passGuess={logGuessNo}
-        passHints={logHints}
-      />
-      <Guess
-        index={4}
-        focus={props.num}
-        done={gameOver}
-        passWin={setGameOver}
-        passGuess={logGuessNo}
-        passHints={logHints}
-      />
-      <Guess
-        index={5}
-        focus={props.num}
-        done={gameOver}
-        passWin={setGameOver}
-        passGuess={logGuessNo}
-        passHints={logHints}
-      />
-      <Guess
-        index={6}
-        focus={props.num}
-        done={gameOver}
-        passWin={setGameOver}
-        passGuess={logGuessNo}
-        passHints={logHints}
-      />
-    </div>
-  );
+  return <div>{guesses}</div>;
 }

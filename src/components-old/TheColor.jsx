@@ -1,6 +1,7 @@
 import { createContext } from "react";
 import { colors } from "../secrets/colors/Colors";
 
+//THIS VAR WOULD NEED TO BE UPDATED
 function daysBetween() {
   const releaseDay = "04/22/2022";
   const today = new Date();
