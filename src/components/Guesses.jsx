@@ -1,5 +1,6 @@
 import React from "react";
 import Guess from "./Guess";
+//import find focus function here
 
 export default function Guesses(props) {
   //props is used to pass info to/from Guess

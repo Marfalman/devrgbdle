@@ -36,6 +36,30 @@
   display: none;
 }
 
+.shareArea {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.toggleBtn {
+  height: 50%;
+  line-height: 0;
+  border-radius: 0;
+  border: none;
+}
+
+.black {
+  background-color: white;
+  color: black;
+}
+
+.white {
+  background-color: black;
+  color: white;
+}
+
 @media only screen and (max-width: 780px) {
   .enterBtn {
     display: block;
