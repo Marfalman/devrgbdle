@@ -14,21 +14,8 @@ export default function StaticGuess(props) {
   }, [props.colors]);
 
   return (
-    <form
-      style={{ display: "flex", flexDirection: "column", alignItems: "center" }}
-    >
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-around",
-          alignItems: "center",
-          width: 384,
-          height: 70,
-          marginBottom: 6,
-          border: `3px solid ${rgba}`,
-          backgroundColor: rgba,
-        }}
-      >
+    <form className="guessForm">
+      <div className="guessFormInner">
         <GuessComp
           letter={"R"}
           number={props.index}
