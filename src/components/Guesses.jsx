@@ -5,11 +5,11 @@ import Guess from "./Guess";
 export default function Guesses(props) {
   //props is used to pass info to/from Guess
 
-  var guessNo = 6;
+  var totalGuesses = 6;
 
   var guesses = [];
 
-  for (var i = 0; i < guessNo; i++) {
+  for (var i = 1; i <= totalGuesses; i++) {
     guesses.push(<Guess currNo={props.number} number={i} key={i} />);
   }
 

@@ -21,18 +21,42 @@ export default function Guess(props) {
   const [rgb, setRgb] = useState("");
   const [close, setClose] = useState({});
 
+  const [current, setCurrent] = useState(false);
   const [bwDisplay, setBwDisplay] = useState("");
+  const [borderColor, setBorderColor] = useState("#CDD0D5");
+  const [backgroundColor, setBackgroundColor] = useState("white");
+
+  useEffect(() => {
+    if (props.number === props.currNo) {
+      setCurrent(true);
+    }
+  }, [props.number, props.currNo]);
 
   useEffect(() => {
     setRgb(`rgba(${R},${G},${B},1)`);
   }, [R, G, B]);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    checkGuess();
-    compareGuess(false);
-    const contrastVal = calculateContrast([R, G, B]);
-    setBwDisplay(contrastVal);
+    var validated = await validateForm();
+    if (validated) {
+      setBackgroundColor(rgb);
+      checkGuess();
+      compareGuess(false);
+      const contrastVal = calculateContrast([R, G, B]);
+      setBwDisplay(contrastVal);
+    }
+  };
+
+  const validateForm = async () => {
+    if (!R || !G || !B) {
+      setBorderColor("red");
+      // findFocus(props.focus);
+      return false;
+    } else {
+      setBorderColor("#CDD0D5");
+      return true;
+    }
   };
 
   const checkGuess = () => {
@@ -70,8 +94,6 @@ export default function Guess(props) {
     setClose(closeObj);
   };
 
-  const calculateContrast = () => {};
-
   function setVal(letter, val) {
     if (val < 0) {
       val = 0;
@@ -94,8 +116,16 @@ export default function Guess(props) {
         handleSubmit(e);
       }}
     >
-      <div className="guessFormInner">
-        <HintBtn number={props.number} passHintReq={compareGuess} />
+      <div
+        className="guessFormInner"
+        style={{ borderColor: borderColor, backgroundColor: backgroundColor }}
+      >
+        <HintBtn
+          number={props.number}
+          passHintReq={(e) => {
+            compareGuess(e);
+          }}
+        />
         <GuessComp
           letter={"R"}
           closeness={close[R]}
@@ -106,6 +136,7 @@ export default function Guess(props) {
             setVal("R", e);
           }}
           val={R}
+          disable={!current}
         />
         <GuessComp
           letter={"G"}
@@ -117,6 +148,7 @@ export default function Guess(props) {
             setVal("G", e);
           }}
           val={G}
+          disable={!current}
         />
         <GuessComp
           letter={"B"}
@@ -128,6 +160,7 @@ export default function Guess(props) {
             setVal("B", e);
           }}
           val={B}
+          disable={!current}
         />
         <div className="enterBtn">
           <Button

@@ -7,7 +7,8 @@ import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import CheckIcon from "@mui/icons-material/Check";
 
 export default function GuessComp(props) {
-  //props: letter (rgb), closeness, bw (contrast), number (the number guess this comp lives in), currNo (current guess number)
+  //props: letter (rgb), closeness, bw (contrast),
+  //number (the number guess this comp lives in), currNo (current guess number)
 
   const [labelColor, setLabelColor] = useState("#929292");
   const [inputColor, setInputColor] = useState("#2C2C2C");
