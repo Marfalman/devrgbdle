@@ -27,6 +27,10 @@ export default function Guess(props) {
   const [backgroundColor, setBackgroundColor] = useState("white");
 
   useEffect(() => {
+    props.passGuess(close);
+  }, [close]); // eslint-disable-line
+
+  useEffect(() => {
     if (props.number === props.currNo) {
       setCurrent(true);
     }
@@ -41,10 +45,10 @@ export default function Guess(props) {
     var validated = await validateForm();
     if (validated) {
       setBackgroundColor(rgb);
-      checkGuess();
-      compareGuess(false);
       const contrastVal = calculateContrast([R, G, B]);
       setBwDisplay(contrastVal);
+      checkGuess();
+      compareGuess(false);
     }
   };
 
@@ -63,33 +67,40 @@ export default function Guess(props) {
     if (rgb === answerColor) {
       setCorrect(true);
     }
+    props.passCorrect(correct);
   };
 
   const compareGuess = (hint) => {
     const closeObj = { R: "", G: "", B: "", hints: false };
-    if (hint) {
-    } else {
-      const correctSplit = answerColor.split("(").pop();
-      const correctArr = correctSplit.split(",");
-      const threshold = 10;
-      const answerArr = [R, G, B];
-      const letters = ["R", "G", "B"];
-      for (let i = 0; i < letters.length; i++) {
-        let letter = letters[i];
-        let answerVal = answerArr[i];
-        let correctVal = correctArr[i];
-        if (answerVal === correctVal) {
-          closeObj[letter] = "correct";
+    const correctSplit = answerColor.split("(").pop();
+    const correctArr = correctSplit.split(",");
+    const threshold = 10;
+    const answerArr = [R, G, B];
+    const letters = ["R", "G", "B"];
+    for (let i = 0; i < letters.length; i++) {
+      let letter = letters[i];
+      let answerVal = answerArr[i];
+      let correctVal = correctArr[i];
+      if (answerVal === correctVal) {
+        closeObj[letter] = "correct";
+      }
+      let diff = answerVal - correctVal;
+      if (Math.abs(diff) <= threshold) {
+        if (diff < 0) {
+          closeObj[letter] = "up";
+        } else if (diff > 0) {
+          closeObj[letter] = "down";
         }
-        let diff = answerVal - correctVal;
-        if (Math.abs(diff) <= threshold) {
-          if (diff < 0) {
-            closeObj[letter] = "up";
-          } else if (diff > 0) {
-            closeObj[letter] = "down";
-          }
+      } else if (hint) {
+        if (diff < 0) {
+          closeObj[letter] = "hint-up";
+        } else if (diff > 0) {
+          closeObj[letter] = "hint-down";
         }
       }
+    }
+    if (hint) {
+      closeObj.hints = true;
     }
     setClose(closeObj);
   };
