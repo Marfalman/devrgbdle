@@ -9,14 +9,11 @@ export default function Game() {
   const [gameStatus, setGameStatus] = useState("progress"); //win, lose, progress
   const [allGuesses, setAllGuesses] = useState([]);
 
-  useEffect(() => {
-    console.log(allGuesses);
-  }, [allGuesses]);
-
   const setWinLose = (e) => {
     const correct = e;
     if (correct) {
       setGameStatus("win");
+      setGuessNumber(7);
     } else {
       let newNum = guessNumber + 1;
       setGuessNumber(newNum);
@@ -29,6 +26,17 @@ export default function Game() {
     }
   }, [guessNumber]);
 
+  const insertGuess = (e) => {
+    let guesses = [...allGuesses];
+    let guessIndex = guesses.findIndex((el) => el.num === e.num);
+    if (guessIndex > -1) {
+      guesses[guessIndex] = e;
+    } else {
+      guesses.push(e);
+    }
+    setAllGuesses(guesses);
+  };
+
   const formatScore = () => {};
 
   return (
@@ -39,7 +47,7 @@ export default function Game() {
         number={guessNumber}
         passCorrect={(e) => setWinLose(e)}
         passGuess={(e) => {
-          setAllGuesses([...allGuesses, e]);
+          insertGuess(e);
         }}
       />
     </div>

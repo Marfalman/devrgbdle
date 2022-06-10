@@ -27,12 +27,10 @@ export default function Guess(props) {
   const [backgroundColor, setBackgroundColor] = useState("white");
 
   useEffect(() => {
-    props.passGuess(close);
-  }, [close]); // eslint-disable-line
-
-  useEffect(() => {
     if (props.number === props.currNo) {
       setCurrent(true);
+    } else {
+      setCurrent(false);
     }
   }, [props.number, props.currNo]);
 
@@ -48,7 +46,10 @@ export default function Guess(props) {
       const contrastVal = calculateContrast([R, G, B]);
       setBwDisplay(contrastVal);
       checkGuess();
-      compareGuess(false);
+      let closeness = await compareGuess(false);
+      if (closeness) {
+        props.passGuess(closeness);
+      }
     }
   };
 
@@ -70,8 +71,8 @@ export default function Guess(props) {
     props.passCorrect(correct);
   };
 
-  const compareGuess = (hint) => {
-    const closeObj = { R: "", G: "", B: "", hints: false };
+  const compareGuess = async (hint) => {
+    const closeObj = { num: props.number, R: "", G: "", B: "", hints: false };
     const correctSplit = answerColor.split("(").pop();
     const correctArr = correctSplit.split(",");
     const threshold = 10;
@@ -103,6 +104,7 @@ export default function Guess(props) {
       closeObj.hints = true;
     }
     setClose(closeObj);
+    return closeObj;
   };
 
   function setVal(letter, val) {
@@ -131,15 +133,20 @@ export default function Guess(props) {
         className="guessFormInner"
         style={{ borderColor: borderColor, backgroundColor: backgroundColor }}
       >
-        <HintBtn
-          number={props.number}
-          passHintReq={(e) => {
-            compareGuess(e);
-          }}
-        />
+        {props.number === props.currNo - 1 && (
+          <HintBtn
+            number={props.number}
+            passHintReq={async (e) => {
+              let closeness = await compareGuess(e);
+              if (closeness) {
+                props.passGuess(closeness);
+              }
+            }}
+          />
+        )}
         <GuessComp
           letter={"R"}
-          closeness={close[R]}
+          closeness={close["R"]}
           bw={bwDisplay}
           number={props.number}
           currentGuess={props.currNo}
@@ -151,7 +158,7 @@ export default function Guess(props) {
         />
         <GuessComp
           letter={"G"}
-          closeness={close[G]}
+          closeness={close["G"]}
           bw={bwDisplay}
           number={props.number}
           currentGuess={props.currNo}
@@ -163,7 +170,7 @@ export default function Guess(props) {
         />
         <GuessComp
           letter={"B"}
-          closeness={close[B]}
+          closeness={close["B"]}
           bw={bwDisplay}
           number={props.number}
           currentGuess={props.currNo}
@@ -184,7 +191,9 @@ export default function Guess(props) {
             <ArrowForwardIosIcon fontSize="small" />
           </Button>
         </div>
-        <ColorToggle contrast={bwDisplay} passContrast={setBwDisplay} />
+        {props.number < props.currNo && (
+          <ColorToggle contrast={bwDisplay} passContrast={setBwDisplay} />
+        )}
       </div>
       <ConfettiEl show={correct} />
     </form>

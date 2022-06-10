@@ -41,25 +41,21 @@ export default function GuessComp(props) {
         }}
         startAdornment={
           <InputAdornment position="start">
-            {/* {props.closer === "up" && (
+            {props.closeness === "up" && (
               <ArrowDropUpIcon sx={{ color: props.bw }} />
             )}
-            {props.closer === "down" && (
+            {props.closeness === "down" && (
               <ArrowDropDownIcon sx={{ color: props.bw }} />
             )}
-            {props.closer === "correct" && (
+            {props.closeness === "correct" && (
               <CheckIcon sx={{ color: props.bw }} />
             )}
-            {props.showHint &&
-              props.hint === "up" &&
-              props.closer === "null" && (
-                <ArrowUpwardIcon sx={{ color: props.bw }} />
-              )}
-            {props.showHint &&
-              props.hint === "down" &&
-              props.closer === "null" && (
-                <ArrowDownwardIcon sx={{ color: props.bw }} />
-              )} */}
+            {props.closeness === "hint-up" && (
+              <ArrowUpwardIcon sx={{ color: props.bw }} />
+            )}
+            {props.closeness === "hint-down" && (
+              <ArrowDownwardIcon sx={{ color: props.bw }} />
+            )}
             <p style={{ fontSize: "75%", color: labelColor }}>{props.letter}</p>
           </InputAdornment>
         }
