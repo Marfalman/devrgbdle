@@ -10,6 +10,7 @@ import ColorToggle from "./ColorToggle";
 import HintBtn from "./HintBtn";
 
 import { calculateContrast } from "../functions/CalculateContrast";
+import { findFocus } from "../functions/FindFocus";
 
 export default function Guess(props) {
   const answerColor = useContext(TheColor);
@@ -38,6 +39,12 @@ export default function Guess(props) {
     setRgb(`rgba(${R},${G},${B},1)`);
   }, [R, G, B]);
 
+  useEffect(() => {
+    if (current && props.number <= 6) {
+      findFocus(props.number);
+    }
+  }, [props.number, current]);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     var validated = await validateForm();
@@ -56,7 +63,7 @@ export default function Guess(props) {
   const validateForm = async () => {
     if (!R || !G || !B) {
       setBorderColor("red");
-      // findFocus(props.focus);
+      findFocus(props.number);
       return false;
     } else {
       setBorderColor("#CDD0D5");
@@ -67,8 +74,10 @@ export default function Guess(props) {
   const checkGuess = () => {
     if (rgb === answerColor) {
       setCorrect(true);
+      props.passCorrect(true);
+    } else {
+      props.passCorrect(false);
     }
-    props.passCorrect(correct);
   };
 
   const compareGuess = async (hint) => {
@@ -133,7 +142,7 @@ export default function Guess(props) {
         className="guessFormInner"
         style={{ borderColor: borderColor, backgroundColor: backgroundColor }}
       >
-        {props.number === props.currNo - 1 && (
+        {props.number === props.currNo - 1 && props.currNo <= 6 && (
           <HintBtn
             number={props.number}
             passHintReq={async (e) => {

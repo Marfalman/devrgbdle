@@ -63,7 +63,7 @@ export default function GuessComp(props) {
         variant="standard"
         value={props.val}
         onChange={(e) => props.passVal(e.target.value)}
-        disabled={props.number === props.currentGuess ? false : true}
+        disabled={props.disable}
       />
     </div>
   );

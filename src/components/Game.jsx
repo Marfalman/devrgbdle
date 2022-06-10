@@ -21,10 +21,10 @@ export default function Game() {
   };
 
   useEffect(() => {
-    if (guessNumber > 6) {
+    if (guessNumber > 6 && gameStatus !== "win") {
       setGameStatus("lose");
     }
-  }, [guessNumber]);
+  }, [guessNumber, gameStatus]);
 
   const insertGuess = (e) => {
     let guesses = [...allGuesses];
