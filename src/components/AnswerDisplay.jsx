@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useContext, useState } from "react";
-// import StaticGuess from "./StaticGuess";
+import StaticGuess from "./StaticGuess";
 
 import { TheColor } from "./TheColor";
 
@@ -7,7 +7,7 @@ export default function AnswerDisplay(props) {
   //props: status
   const answerColor = useContext(TheColor);
   const canvasRef = useRef(null);
-  const [RGB, setRGB] = useState([]);
+  const [RGB, setRGB] = useState({});
 
   useEffect(() => {
     const draw = (ctx) => {
@@ -20,7 +20,6 @@ export default function AnswerDisplay(props) {
     const canvas = canvasRef.current;
     const context = canvas.getContext("2d");
 
-    //Our draw come here
     draw(context);
 
     const breakApartVals = () => {
@@ -28,7 +27,7 @@ export default function AnswerDisplay(props) {
       const R = parseInt(stringSplit[0].split("(").pop());
       const G = parseInt(stringSplit[1]);
       const B = parseInt(stringSplit[2]);
-      setRGB([R, G, B]);
+      setRGB({ R: R, G: G, B: B });
     };
 
     breakApartVals();
@@ -44,7 +43,7 @@ export default function AnswerDisplay(props) {
     return (
       <div>
         <canvas ref={canvasRef} style={{ display: "none" }} />
-        {/* <StaticGuess colors={RGB} /> */}
+        <StaticGuess colors={RGB} />
       </div>
     );
   }

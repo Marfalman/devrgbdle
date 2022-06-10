@@ -27,7 +27,7 @@ export default function GuessComp(props) {
         id={`${props.number}-${props.letter}-value`}
         type="number"
         sx={{
-          fontSize: props.number ? "150%" : "200%",
+          fontSize: props.number === props.currentGuess ? "200%" : "150%",
           color: inputColor,
           "&.Mui-disabled input": {
             color: labelColor,

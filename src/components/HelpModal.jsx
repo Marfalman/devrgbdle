@@ -15,7 +15,7 @@ import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import CheckIcon from "@mui/icons-material/Check";
 import TipsAndUpdatesIcon from "@mui/icons-material/TipsAndUpdates";
 
-// import StaticGuess from "./StaticGuess";
+import StaticGuess from "./StaticGuess";
 
 export default function HelpModal(props) {
   const handleClose = () => props.passHelpOpen(false);
@@ -121,11 +121,11 @@ export default function HelpModal(props) {
             Examples
           </Typography>
           <div className="modalExamples">
-            {/* <StaticGuess colors={[255, 0, 0]} />
-            <StaticGuess colors={[0, 255, 0]} />
-            <StaticGuess colors={[0, 0, 255]} />
-            <StaticGuess colors={[240, 25, 190]} />
-            <StaticGuess colors={[65, 135, 130]} /> */}
+            <StaticGuess colors={{ R: 255, G: 0, B: 0 }} />
+            <StaticGuess colors={{ R: 0, G: 255, B: 0 }} />
+            <StaticGuess colors={{ R: 0, G: 0, B: 255 }} />
+            <StaticGuess colors={{ R: 240, G: 25, B: 190 }} />
+            <StaticGuess colors={{ R: 65, G: 135, B: 130 }} />
           </div>
         </Container>
       </Box>

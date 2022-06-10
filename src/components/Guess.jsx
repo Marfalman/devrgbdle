@@ -26,6 +26,7 @@ export default function Guess(props) {
   const [bwDisplay, setBwDisplay] = useState("");
   const [borderColor, setBorderColor] = useState("#CDD0D5");
   const [backgroundColor, setBackgroundColor] = useState("white");
+  const [submitted, setSubmitted] = useState(false);
 
   useEffect(() => {
     if (props.number === props.currNo) {
@@ -58,6 +59,7 @@ export default function Guess(props) {
         props.passGuess(closeness);
       }
     }
+    setSubmitted(true);
   };
 
   const validateForm = async () => {
@@ -200,7 +202,7 @@ export default function Guess(props) {
             <ArrowForwardIosIcon fontSize="small" />
           </Button>
         </div>
-        {props.number < props.currNo && (
+        {submitted && (
           <ColorToggle contrast={bwDisplay} passContrast={setBwDisplay} />
         )}
       </div>
