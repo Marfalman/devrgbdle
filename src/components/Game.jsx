@@ -37,11 +37,9 @@ export default function Game() {
     setAllGuesses(guesses);
   };
 
-  const formatScore = () => {};
-
   return (
     <div className="main">
-      <Share final={allGuesses} number={guessNumber} />
+      <Share final={allGuesses} status={gameStatus} />
       <AnswerDisplay status={gameStatus} />
       <Guesses
         number={guessNumber}

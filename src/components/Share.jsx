@@ -1,87 +1,88 @@
 import React, { useState, useEffect } from "react";
-import { Button, TextareaAutosize } from "@mui/material";
+import { Button, TextareaAutosize, Typography } from "@mui/material";
 import { TheDay } from "./TheColor";
-import { Typography } from "@mui/material";
-
-const url = "https://www.rgbdle.page/";
 
 export default function Share(props) {
-  const [open, setOpen] = useState(false);
-  const [shown, setShown] = useState(0);
-  const [noClipboard, setNoClipboard] = useState(false);
-  const [string, setString] = useState("");
+  //props: final (guesses), status
+  const url = "https://www.rgbdle.page/";
 
-  useEffect(() => {
-    if (props.final.length > 0) {
-      setShown(100);
+  // const [shown, setShown] = useState(false);
+
+  // useEffect(() => {
+  //   if (props.status !== "progress") {
+  //     setShown(true);
+  //   }
+  // }, [props.status]);
+
+  const getWin = (guesses) => {
+    let lastGuess = guesses[guesses.length - 1];
+    if (
+      lastGuess.R === "correct" &&
+      lastGuess.G === "correct" &&
+      lastGuess.B === "correct"
+    ) {
+      return lastGuess.num;
+    } else {
+      return "X";
     }
-  }, [props.final]);
-
-  //day number
-  const dayNo = TheDay._currentValue;
-
-  //clipboard stuff
-  const copyAns = () => {
-    //I NEED A BETTER WAY OF DOING THIS
-    const finalArr = props.final;
-    let lost = true;
-    if (finalArr.length === 6) {
-      const finalAnsStr = finalArr[5].join("");
-      if (finalAnsStr === "✅✅✅" || finalAnsStr === "✅✅✅💡") {
-        lost = false;
-      }
-    } else lost = false;
-    const stringArr = [];
-    stringArr.push(`RGBdle ${dayNo}: ${lost ? "X" : props.final.length}/6 \n`);
-    finalArr.forEach((el) => {
-      const string = el.join(" ");
-      stringArr.push(string);
-    });
-    stringArr.push(`\n${url}`);
-    const finalStr = stringArr.join("\n");
-    setString(finalStr);
-
-    copyToClipBoard(finalStr);
   };
 
-  //from here: https://www.delftstack.com/howto/javascript/javascript-copy-to-clipboard/
-  function copyToClipBoard(content) {
-    try {
-      navigator.clipboard
-        .writeText(content)
-        .then(setOpen(true))
-        .catch((err) => {
-          console.log("Something went wrong", err);
-          setNoClipboard(true);
-        });
-    } catch (error) {
-      setNoClipboard(true);
-    }
-  }
+  const formatScore = (guesses) => {
+    const scoreArr = [];
+    guesses.forEach((guess) => {
+      const guessArr = [];
+      for (const key in guess) {
+        if (key !== "num" && key !== "hints") {
+          let emoji = strToEmoji[guess[key]];
+          guessArr.push(emoji);
+        }
+        if (key === "hints" && guess[key] === true) {
+          let emoji = strToEmoji[key];
+          guessArr.push(emoji);
+        }
+      }
+      const guessStr = guessArr.join("");
+      scoreArr.push(guessStr);
+    });
+    const scoreStr = scoreArr.join("\n");
+    return scoreStr;
+  };
+
+  const strToEmoji = {
+    "": "❌",
+    down: "⬇️",
+    "hint-down": "⬇️",
+    up: "⬆️",
+    "hint-up": "⬆️",
+    correct: "✅",
+    hints: "💡",
+  };
+
+  const shareString = () => {
+    const loseWin = getWin(props.final);
+    const emojis = formatScore(props.final);
+    const dayNo = TheDay._currentValue;
+    const finalStr = `RGBdle ${dayNo}: ${loseWin}/6\n${emojis}\n${url}`;
+    console.log(finalStr);
+  };
 
   return (
     <div
       className="shareArea"
-      style={{
-        opacity: shown,
-      }}
+      // style={{
+      //   opacity: shown ? 100 : 0,
+      // }}
     >
       <Button
         variant="contained"
         color="grey"
-        onClick={copyAns}
-        onTouchEnd={copyAns}
+        onClick={shareString}
+        onTouchEnd={shareString}
         style={{ cursor: "pointer" }}
       >
         Share
       </Button>
-      <Typography sx={{ p: 1 }}>
-        {open && "Content copied to clipboard."}
-        {!open && !noClipboard && "Thanks for playing."}
-      </Typography>
-      {noClipboard && (
-        <TextareaAutosize value={string} style={{ marginBottom: ".5rem" }} />
-      )}
+      <Typography sx={{ p: 1 }}>Thanks for playing</Typography>
     </div>
   );
 }
