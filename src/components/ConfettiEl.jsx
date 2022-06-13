@@ -15,5 +15,5 @@ export default function ConfettiEl(props) {
     perspective: "500px",
     colors: ["#a864fd", "#29cdff", "#78ff44", "#ff718d", "#fdff6a"],
   };
-  return <Confetti active={props.confetti} config={config} />;
+  return <Confetti active={props.show} config={config} />;
 }

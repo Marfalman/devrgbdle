@@ -5,7 +5,7 @@ import TipsAndUpdatesIcon from "@mui/icons-material/TipsAndUpdates";
 //from the mui docs
 export default function HintBtn(props) {
   const generateHint = () => {
-    props.passChildHint(true);
+    props.passHintReq(true);
   };
 
   return (

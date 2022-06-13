@@ -18,23 +18,7 @@ import TipsAndUpdatesIcon from "@mui/icons-material/TipsAndUpdates";
 import StaticGuess from "./StaticGuess";
 
 export default function HelpModal(props) {
-  const handleClose = () => props.passModalOpen(false);
-
-  const style = {
-    position: "fixed",
-    top: 0,
-    left: 0,
-    width: "100%",
-    height: "100%",
-    bgcolor: "white",
-    outline: 0,
-    overflow: "scroll",
-  };
-
-  const typographyStyle = {
-    lineHeight: "1.5rem",
-    margin: "1rem 0",
-  };
+  const handleClose = () => props.passHelpOpen(false);
 
   return (
     <Modal
@@ -43,7 +27,7 @@ export default function HelpModal(props) {
       aria-labelledby="modal-modal-title"
       aria-describedby="modal-modal-description"
     >
-      <Box sx={style}>
+      <Box className="modalBox">
         <IconButton onClick={handleClose}>
           <CloseIcon />
         </IconButton>
@@ -57,31 +41,31 @@ export default function HelpModal(props) {
             How to play
           </Typography>
           <div id="modal-modal-description">
-            <Typography sx={typographyStyle}>
+            <Typography className="modalTypog">
               Like{" "}
               <a href="https://www.nytimes.com/games/wordle/index.html">
                 Wordle
               </a>
               , but for colors.
             </Typography>
-            <Typography sx={typographyStyle}>
+            <Typography className="modalTypog">
               Guess the RGBdle in six tries.
             </Typography>
-            <Typography sx={typographyStyle}>
+            <Typography className="modalTypog">
               Each guess must have a value for R, G, and B values, between 0 and
               255. Hit the enter button to submit.
             </Typography>
-            <Typography sx={typographyStyle}>
+            <Typography className="modalTypog">
               After each guess, the background of the guess will change color to
               show the color you submitted.
             </Typography>
-            <Typography sx={typographyStyle}>
+            <Typography className="modalTypog">
               If you're close to the value, you'll get a small arrow (up{" "}
               <ArrowDropUpIcon /> or down <ArrowDropDownIcon />) to indicate
               that you just need to increase or decrease the value a{" "}
               <em>tiny</em> bit.
             </Typography>
-            <Typography sx={typographyStyle}>
+            <Typography className="modalTypog">
               If you get the value exactly right, you'll see a checkmark{" "}
               <CheckIcon /> next to that value's corresponding letter.
             </Typography>
@@ -92,15 +76,15 @@ export default function HelpModal(props) {
               <ArrowUpwardIcon /> or decrease <ArrowDownwardIcon />
               the value.
             </Typography>
-            <Typography sx={typographyStyle}>
+            <Typography className="modalTypog">
               Adjust the values of your next guess to get closer to the true
               color.
             </Typography>
-            <Typography sx={typographyStyle}>
+            <Typography className="modalTypog">
               When you guess the true color, the block of your guess will lose
               its grey border.
             </Typography>
-            <Typography sx={typographyStyle}>
+            <Typography className="modalTypog">
               Read about{" "}
               <a href="https://en.wikipedia.org/wiki/Color_theory">
                 color theory
@@ -109,10 +93,10 @@ export default function HelpModal(props) {
             </Typography>
           </div>
           <Divider />
-          <Typography sx={typographyStyle}>
+          <Typography className="modalTypog">
             <strong>Symbol Key</strong>
           </Typography>
-          <ul style={{ listStyle: "none" }}>
+          <ul className="modalList">
             <li>
               <ArrowDropUpIcon /> Increase the value by a small amount
             </li>
@@ -133,22 +117,15 @@ export default function HelpModal(props) {
             </li>
           </ul>
           <Divider />
-          <Typography style={{ fontWeight: "bold" }} sx={typographyStyle}>
+          <Typography style={{ fontWeight: "bold" }} className="modalTypog">
             Examples
           </Typography>
-          <div
-            style={{
-              width: "100%",
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "flex-start",
-            }}
-          >
-            <StaticGuess colors={[255, 0, 0]} />
-            <StaticGuess colors={[0, 255, 0]} />
-            <StaticGuess colors={[0, 0, 255]} />
-            <StaticGuess colors={[240, 25, 190]} />
-            <StaticGuess colors={[65, 135, 130]} />
+          <div className="modalExamples">
+            <StaticGuess colors={{ R: 255, G: 0, B: 0 }} />
+            <StaticGuess colors={{ R: 0, G: 255, B: 0 }} />
+            <StaticGuess colors={{ R: 0, G: 0, B: 255 }} />
+            <StaticGuess colors={{ R: 240, G: 25, B: 190 }} />
+            <StaticGuess colors={{ R: 65, G: 135, B: 130 }} />
           </div>
         </Container>
       </Box>

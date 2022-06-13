@@ -1,98 +1,71 @@
-import React, { useState, useEffect, useContext } from "react";
-import { makeStyles } from "@mui/styles";
+import React, { useState, useContext, useEffect } from "react";
+
 import { Button } from "@mui/material";
-import GuessComp from "./GuessComp";
+import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
+
 import { TheColor } from "./TheColor";
 import ConfettiEl from "./ConfettiEl";
-import { findFocus } from "../functions/FindFocus";
-import { calculateContrast } from "../functions/CalculateContrast";
+import GuessComp from "./GuessComp";
+import ColorToggle from "./ColorToggle";
 import HintBtn from "./HintBtn";
-import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
-import BWToggle from "./BWToggle";
 
-const useStyles = makeStyles({
-  enterBtn: {
-    display: "none",
-    "@media (max-width: 780px)": {
-      display: "block",
-    },
-  },
-});
+import { calculateContrast } from "../functions/CalculateContrast";
+import { findFocus } from "../functions/FindFocus";
 
 export default function Guess(props) {
-  const classes = useStyles();
-
   const answerColor = useContext(TheColor);
 
-  const [rVal, setRVal] = useState("");
-  const [gVal, setGVal] = useState("");
-  const [bVal, setBVal] = useState("");
-  const [rgb, setRgb] = useState("rgba(255,255,255,1)");
-  const [contrast, setContrast] = useState("");
-  const [disableInputs, setDisableInputs] = useState(false);
-  const [win, setWin] = useState(false);
+  const [correct, setCorrect] = useState(false);
+  const [R, setR] = useState("");
+  const [G, setG] = useState("");
+  const [B, setB] = useState("");
+  const [rgb, setRgb] = useState("");
+  const [close, setClose] = useState({});
+
+  const [current, setCurrent] = useState(false);
+  const [bwDisplay, setBwDisplay] = useState("");
   const [borderColor, setBorderColor] = useState("#CDD0D5");
-  const [close, setClose] = useState({ R: "null", G: "null", B: "null" });
-  const [hints, setHints] = useState({ R: "null", G: "null", B: "null" });
-  const [showHints, setShowHints] = useState(false);
+  const [backgroundColor, setBackgroundColor] = useState("white");
+  const [submitted, setSubmitted] = useState(false);
 
   useEffect(() => {
-    if (showHints) {
-      props.passHints({ index: props.index, hint: true });
+    if (props.number === props.currNo) {
+      setCurrent(true);
+    } else {
+      setCurrent(false);
     }
-  }, [showHints]); // eslint-disable-line
+  }, [props.number, props.currNo]);
 
   useEffect(() => {
-    if (rVal < 0) {
-      setRVal(0);
-    }
-    if (rVal > 255) {
-      setRVal(255);
-    }
-    if (gVal < 0) {
-      setGVal(0);
-    }
-    if (gVal > 255) {
-      setGVal(255);
-    }
-    if (bVal < 0) {
-      setBVal(0);
-    }
-    if (bVal > 255) {
-      setBVal(255);
-    }
-  }, [rVal, gVal, bVal]);
+    setRgb(`rgba(${R},${G},${B},1)`);
+  }, [R, G, B]);
 
   useEffect(() => {
-    if (props.done) {
-      setDisableInputs(true);
-    } else if (props.index !== props.focus) {
-      setDisableInputs(true);
-    } else if (props.index === props.focus && !props.done) {
-      setDisableInputs(false);
+    if (current && props.number <= 6) {
+      findFocus(props.number);
     }
-  }, [props]);
+  }, [props.number, current]);
 
-  useEffect(() => {
-    if (props.focus <= 6) {
-      findFocus(props.focus);
-    }
-  }, [disableInputs, props.focus]);
-
-  const onFormSubmit = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     var validated = await validateForm();
     if (validated) {
-      var newRGB = await setField();
-      matchColor(newRGB);
-      checkComponents(newRGB);
+      setBackgroundColor(rgb);
+      const contrastVal = calculateContrast([R, G, B]);
+      setBwDisplay(contrastVal);
+      checkGuess();
+      let closeness = await compareGuess(false);
+      if (closeness) {
+        props.passGuess(closeness);
+      }
     }
+    setSubmitted(true);
   };
 
   const validateForm = async () => {
-    if (!rVal || !gVal || !bVal) {
+    if (!R || !G || !B) {
       setBorderColor("red");
-      findFocus(props.focus);
+      findFocus(props.number);
       return false;
     } else {
       setBorderColor("#CDD0D5");
@@ -100,115 +73,126 @@ export default function Guess(props) {
     }
   };
 
-  const setField = async function () {
-    return new Promise((resolve) => {
-      const rgb = `rgba(${rVal},${gVal},${bVal},1)`;
-      setRgb(rgb);
-      setDisableInputs(true);
-      const contrastVal = calculateContrast([rVal, bVal, gVal]);
-      setContrast(contrastVal);
-      resolve(rgb);
-    });
-  };
-
-  const matchColor = (color) => {
-    if (answerColor === color) {
-      setWin(true);
-      setBorderColor(answerColor);
-      props.passWin(true);
+  const checkGuess = () => {
+    if (rgb === answerColor) {
+      setCorrect(true);
+      props.passCorrect(true);
+    } else {
+      props.passCorrect(false);
     }
-    props.passGuess({
-      num: props.index,
-      info: close,
-    });
   };
 
-  const checkComponents = (color) => {
+  const compareGuess = async (hint) => {
+    const closeObj = { num: props.number, R: "", G: "", B: "", hints: false };
     const correctSplit = answerColor.split("(").pop();
     const correctArr = correctSplit.split(",");
     const threshold = 10;
-    const answerArr = color.toString().split("(").pop().split(",");
-    const closeObj = close;
-    const hintObj = hints;
-    for (let i = 0; i < 3; i++) {
-      const corrLetter = ["R", "G", "B"];
-      const correctEl = correctArr[i];
-      const answerEl = answerArr[i];
-      const closeTo = correctEl - answerEl;
-      const absClose = Math.abs(closeTo);
-      if (closeTo < 0) {
-        hintObj[corrLetter[i]] = "down";
-      } else if (closeTo > 0) {
-        hintObj[corrLetter[i]] = "up";
+    const answerArr = [R, G, B];
+    const letters = ["R", "G", "B"];
+    for (let i = 0; i < letters.length; i++) {
+      let letter = letters[i];
+      let answerVal = answerArr[i];
+      let correctVal = correctArr[i];
+      if (answerVal === correctVal) {
+        closeObj[letter] = "correct";
       }
-      if (absClose <= threshold) {
-        if (closeTo === 0) {
-          closeObj[corrLetter[i]] = "correct";
-        } else if (closeTo < 0) {
-          closeObj[corrLetter[i]] = "down";
-        } else if (closeTo > 0) {
-          closeObj[corrLetter[i]] = "up";
+      let diff = answerVal - correctVal;
+      if (Math.abs(diff) <= threshold) {
+        if (diff < 0) {
+          closeObj[letter] = "up";
+        } else if (diff > 0) {
+          closeObj[letter] = "down";
+        }
+      } else if (hint) {
+        if (diff < 0) {
+          closeObj[letter] = "hint-up";
+        } else if (diff > 0) {
+          closeObj[letter] = "hint-down";
         }
       }
     }
+    if (hint) {
+      closeObj.hints = true;
+    }
     setClose(closeObj);
-    setHints(hintObj);
+    return closeObj;
   };
+
+  function setVal(letter, val) {
+    if (val < 0) {
+      val = 0;
+    } else if (val > 255) {
+      val = 255;
+    }
+    if (letter === "R") {
+      setR(val);
+    } else if (letter === "G") {
+      setG(val);
+    } else if (letter === "B") {
+      setB(val);
+    }
+  }
 
   return (
     <form
-      onSubmit={onFormSubmit}
-      style={{ display: "flex", flexDirection: "column", alignItems: "center" }}
-      id={`guess-${props.index}`}
+      className="guessForm"
+      onSubmit={(e) => {
+        handleSubmit(e);
+      }}
     >
       <div
-        style={{
-          display: "flex",
-          justifyContent: "space-around",
-          alignItems: "center",
-          width: "100%",
-          height: 70,
-          border: `${disableInputs ? 3 : 4}px solid ${borderColor}`,
-          margin: "6px 0",
-          backgroundColor: rgb,
-        }}
+        className="guessFormInner"
+        style={{ borderColor: borderColor, backgroundColor: backgroundColor }}
       >
-        {props.index === props.focus - 1 && props.index < 6 && (
-          <HintBtn passChildHint={setShowHints} />
+        {props.number === props.currNo - 1 && props.currNo <= 6 && (
+          <HintBtn
+            number={props.number}
+            passHintReq={async (e) => {
+              let closeness = await compareGuess(e);
+              if (closeness) {
+                props.passGuess(closeness);
+              }
+            }}
+          />
         )}
         <GuessComp
           letter={"R"}
-          number={props.index}
-          val={rVal}
-          passVal={setRVal}
-          disable={disableInputs}
-          bw={contrast}
-          closer={close.R}
-          hint={hints.R}
-          showHint={showHints}
+          closeness={close["R"]}
+          bw={bwDisplay}
+          number={props.number}
+          currentGuess={props.currNo}
+          passVal={(e) => {
+            setVal("R", e);
+          }}
+          val={R}
+          disable={!current}
         />
         <GuessComp
           letter={"G"}
-          val={gVal}
-          passVal={setGVal}
-          disable={disableInputs}
-          bw={contrast}
-          closer={close.G}
-          hint={hints.G}
-          showHint={showHints}
+          closeness={close["G"]}
+          bw={bwDisplay}
+          number={props.number}
+          currentGuess={props.currNo}
+          passVal={(e) => {
+            setVal("G", e);
+          }}
+          val={G}
+          disable={!current}
         />
         <GuessComp
           letter={"B"}
-          val={bVal}
-          passVal={setBVal}
-          disable={disableInputs}
-          bw={contrast}
-          closer={close.B}
-          hint={hints.B}
-          showHint={showHints}
+          closeness={close["B"]}
+          bw={bwDisplay}
+          number={props.number}
+          currentGuess={props.currNo}
+          passVal={(e) => {
+            setVal("B", e);
+          }}
+          val={B}
+          disable={!current}
         />
-        {props.index === props.focus && (
-          <div className={classes.enterBtn}>
+        {current && (
+          <div className="enterBtn">
             <Button
               type="submit"
               variant="contained"
@@ -220,11 +204,11 @@ export default function Guess(props) {
             </Button>
           </div>
         )}
-        {props.index <= props.focus - 1 && (
-          <BWToggle passContrast={setContrast} contrast={contrast} />
+        {submitted && (
+          <ColorToggle contrast={bwDisplay} passContrast={setBwDisplay} />
         )}
       </div>
-      <ConfettiEl confetti={win} />
+      <ConfettiEl show={correct} />
     </form>
   );
 }

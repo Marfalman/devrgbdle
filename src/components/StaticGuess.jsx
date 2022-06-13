@@ -1,53 +1,51 @@
 import React, { useState, useEffect } from "react";
+
 import GuessComp from "./GuessComp";
+import ColorToggle from "./ColorToggle";
+
 import { calculateContrast } from "../functions/CalculateContrast";
 
-export default function StaticGuess(props) {
-  const [rgba, setRgba] = useState("");
-  const [contrast, setContrast] = useState("");
+export default function Guess(props) {
+  const [color, setColor] = useState("white");
+  const [bwDisplay, setBwDisplay] = useState("white");
 
   useEffect(() => {
-    const contrastVal = calculateContrast(props.colors);
-    setContrast(contrastVal);
-    const calculatedRgba = `rgba(${props.colors[0]}, ${props.colors[1]}, ${props.colors[2]}, 1)`;
-    setRgba(calculatedRgba);
+    setColor(
+      `rgba(${props.colors.R}, ${props.colors.G}, ${props.colors.B}, 1)`
+    );
+    const contrastVal = calculateContrast([
+      props.colors.R,
+      props.colors.G,
+      props.colors.B,
+    ]);
+    setBwDisplay(contrastVal);
   }, [props.colors]);
 
   return (
-    <form
-      style={{ display: "flex", flexDirection: "column", alignItems: "center" }}
-    >
+    <form className="guessForm">
       <div
-        style={{
-          display: "flex",
-          justifyContent: "space-around",
-          alignItems: "center",
-          width: 384,
-          height: 70,
-          marginBottom: 6,
-          border: `3px solid ${rgba}`,
-          backgroundColor: rgba,
-        }}
+        className="guessFormInner"
+        style={{ backgroundColor: color, borderColor: color }}
       >
         <GuessComp
           letter={"R"}
-          number={props.index}
-          val={props.colors[0]}
+          bw={bwDisplay}
+          val={props.colors.R || 255}
           disable={true}
-          bw={contrast}
         />
         <GuessComp
           letter={"G"}
-          val={props.colors[1]}
+          bw={bwDisplay}
+          val={props.colors.G || 255}
           disable={true}
-          bw={contrast}
         />
         <GuessComp
           letter={"B"}
-          val={props.colors[2]}
+          bw={bwDisplay}
+          val={props.colors.B || 255}
           disable={true}
-          bw={contrast}
         />
+        <ColorToggle contrast={bwDisplay} passContrast={setBwDisplay} />
       </div>
     </form>
   );

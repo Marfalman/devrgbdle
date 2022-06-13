@@ -7,6 +7,9 @@ import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import CheckIcon from "@mui/icons-material/Check";
 
 export default function GuessComp(props) {
+  //props: letter (rgb), closeness, bw (contrast),
+  //number (the number guess this comp lives in), currentGuess (current guess number)
+
   const [labelColor, setLabelColor] = useState("#929292");
   const [inputColor, setInputColor] = useState("#2C2C2C");
 
@@ -18,17 +21,14 @@ export default function GuessComp(props) {
   }, [props.bw]);
 
   return (
-    <div style={{ width: "100%", margin: "0 5px" }}>
+    <div className="guessComp">
       <Input
         className="guessInput"
         id={`${props.number}-${props.letter}-value`}
         type="number"
         sx={{
-          width: "100%",
-          fontSize: props.disable ? "150%" : "200%",
+          fontSize: props.number === props.currentGuess ? "200%" : "150%",
           color: inputColor,
-          height: 40,
-
           "&.Mui-disabled input": {
             color: labelColor,
             WebkitTextFillColor: labelColor,
@@ -41,25 +41,21 @@ export default function GuessComp(props) {
         }}
         startAdornment={
           <InputAdornment position="start">
-            {props.closer === "up" && (
+            {props.closeness === "up" && (
               <ArrowDropUpIcon sx={{ color: props.bw }} />
             )}
-            {props.closer === "down" && (
+            {props.closeness === "down" && (
               <ArrowDropDownIcon sx={{ color: props.bw }} />
             )}
-            {props.closer === "correct" && (
+            {props.closeness === "correct" && (
               <CheckIcon sx={{ color: props.bw }} />
             )}
-            {props.showHint &&
-              props.hint === "up" &&
-              props.closer === "null" && (
-                <ArrowUpwardIcon sx={{ color: props.bw }} />
-              )}
-            {props.showHint &&
-              props.hint === "down" &&
-              props.closer === "null" && (
-                <ArrowDownwardIcon sx={{ color: props.bw }} />
-              )}
+            {props.closeness === "hint-up" && (
+              <ArrowUpwardIcon sx={{ color: props.bw }} />
+            )}
+            {props.closeness === "hint-down" && (
+              <ArrowDownwardIcon sx={{ color: props.bw }} />
+            )}
             <p style={{ fontSize: "75%", color: labelColor }}>{props.letter}</p>
           </InputAdornment>
         }
