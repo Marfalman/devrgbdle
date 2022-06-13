@@ -23,3 +23,4 @@ It's just a fun little game based on Wordle's style, where users have 6 attempts
 - [ ] **Contributing**: I want to make a contributing guide so people can submit colors, feature ideas, and code!
 - [ ] **Better mobile display**
 - [ ] **Copy to clipboard on mobile**
+- [ ] **Automate testing with Cypress**
