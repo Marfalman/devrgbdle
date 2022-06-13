@@ -191,17 +191,19 @@ export default function Guess(props) {
           val={B}
           disable={!current}
         />
-        <div className="enterBtn">
-          <Button
-            type="submit"
-            variant="contained"
-            color="grey"
-            size="small"
-            style={{ minWidth: "fit-content" }}
-          >
-            <ArrowForwardIosIcon fontSize="small" />
-          </Button>
-        </div>
+        {current && (
+          <div className="enterBtn">
+            <Button
+              type="submit"
+              variant="contained"
+              color="grey"
+              size="small"
+              style={{ minWidth: "fit-content" }}
+            >
+              <ArrowForwardIosIcon fontSize="small" />
+            </Button>
+          </div>
+        )}
         {submitted && (
           <ColorToggle contrast={bwDisplay} passContrast={setBwDisplay} />
         )}

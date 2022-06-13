@@ -40,8 +40,8 @@ function pickColor() {
   }
 }
 
-// export const TheColor = createContext(pickColor());
+export const TheColor = createContext(pickColor());
 export const TheDay = createContext(daysBetween());
 
-export const TheColor = createContext("rgba(205,130,200,1)");
+// export const TheColor = createContext("rgba(205,130,200,1)");
 // export const TheColor = createContext("rgba(0,0,0,1)");

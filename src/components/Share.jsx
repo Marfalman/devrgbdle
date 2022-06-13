@@ -1,18 +1,19 @@
 import React, { useState, useEffect } from "react";
-import { Button, TextareaAutosize, Typography } from "@mui/material";
+import { Button, Typography } from "@mui/material";
 import { TheDay } from "./TheColor";
 
 export default function Share(props) {
   //props: final (guesses), status
   const url = "https://www.rgbdle.page/";
 
-  // const [shown, setShown] = useState(false);
+  const [shown, setShown] = useState(false);
+  const [copied, setCopied] = useState(false);
 
-  // useEffect(() => {
-  //   if (props.status !== "progress") {
-  //     setShown(true);
-  //   }
-  // }, [props.status]);
+  useEffect(() => {
+    if (props.status !== "progress") {
+      setShown(true);
+    }
+  }, [props.status]);
 
   const getWin = (guesses) => {
     let lastGuess = guesses[guesses.length - 1];
@@ -63,15 +64,31 @@ export default function Share(props) {
     const emojis = formatScore(props.final);
     const dayNo = TheDay._currentValue;
     const finalStr = `RGBdle ${dayNo}: ${loseWin}/6\n${emojis}\n${url}`;
-    console.log(finalStr);
+    copyToClipBoard(finalStr);
   };
+
+  //from here: https://www.delftstack.com/howto/javascript/javascript-copy-to-clipboard/
+  function copyToClipBoard(content) {
+    try {
+      navigator.clipboard
+        .writeText(content)
+        .then(setCopied(true))
+        .catch((err) => {
+          alert("Can't copy to clipboard");
+          console.log("No clipboard detected", err);
+        });
+    } catch (error) {
+      alert("Can't copy to clipboard");
+      console.log("No clipboard detected", error);
+    }
+  }
 
   return (
     <div
       className="shareArea"
-      // style={{
-      //   opacity: shown ? 100 : 0,
-      // }}
+      style={{
+        opacity: shown ? 100 : 0,
+      }}
     >
       <Button
         variant="contained"
@@ -82,7 +99,10 @@ export default function Share(props) {
       >
         Share
       </Button>
-      <Typography sx={{ p: 1 }}>Thanks for playing</Typography>
+      <Typography sx={{ p: 1 }}>
+        {!copied && "Thanks for playing!"}
+        {copied && "Content copied to clipboard."}
+      </Typography>
     </div>
   );
 }
