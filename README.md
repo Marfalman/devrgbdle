@@ -13,7 +13,7 @@ It's just a fun little game based on Wordle's style, where users have 6 attempts
 
 ## Goals for the Future
 ### Features
-- [ ] **Clean up code**: I added features a bit haphazardly, and would like to re-organize the code.
+- [X] **Clean up code**: I added features a bit haphazardly, and would like to re-organize the code.
 - [ ] **a11y**: Make the page & game more accessible. 
 - [ ] **Stats**: Like Wordle, display stats for the user based on their play history. Likely using a cookie.
 - [ ] **No refresh**: Store user's score for the day, no replay on refresh.
