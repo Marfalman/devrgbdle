@@ -3,11 +3,24 @@ import React, { useState, useEffect } from "react";
 import AnswerDisplay from "./AnswerDisplay";
 import Guesses from "./Guesses";
 import Share from "./Share";
+import { getSavedGuess, getTotalGuesses } from "../functions/StoreState";
 
 export default function Game() {
-  const [guessNumber, setGuessNumber] = useState(1);
+  const [guessNumber, setGuessNumber] = useState(() => {
+    const loaded = getSavedGuess();
+    if (!loaded) {
+      return 1;
+    }
+    return loaded;
+  });
   const [gameStatus, setGameStatus] = useState("progress"); //win, lose, progress
-  const [allGuesses, setAllGuesses] = useState([]);
+  const [allGuesses, setAllGuesses] = useState(() => {
+    const savedGuesses = getTotalGuesses();
+    if (!savedGuesses) {
+      return [];
+    }
+    return savedGuesses;
+  });
 
   const setWinLose = (e) => {
     const correct = e;
