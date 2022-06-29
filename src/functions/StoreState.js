@@ -31,6 +31,13 @@ export function alterClose(close, num) {
   localStorage.setItem(currentState, JSON.stringify(gametoEdit));
 }
 
+export function alterContrast(bw, num) {
+  var currentGame = JSON.parse(localStorage.getItem(currentState));
+  var gametoEdit = currentGame ? currentGame : StoredGameState;
+  gametoEdit.Contrast[num - 1] = bw;
+  localStorage.setItem(currentState, JSON.stringify(gametoEdit));
+}
+
 const state = JSON.parse(localStorage.getItem(currentState));
 
 function verifyDate() {

@@ -1,9 +1,12 @@
 import React from "react";
 
+import { alterContrast } from "../functions/StoreState";
+
 export default function ColorToggle(props) {
   const handleChange = (e) => {
     e.preventDefault();
     props.passContrast(e.target.value);
+    alterContrast(e.target.value, props.number);
   };
 
   return (

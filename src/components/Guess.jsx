@@ -261,7 +261,11 @@ export default function Guess(props) {
           </div>
         )}
         {submitted && (
-          <ColorToggle contrast={bwDisplay} passContrast={setBwDisplay} />
+          <ColorToggle
+            number={props.number}
+            contrast={bwDisplay}
+            passContrast={setBwDisplay}
+          />
         )}
       </div>
       <ConfettiEl show={correct} />
