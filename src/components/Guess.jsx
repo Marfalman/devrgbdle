@@ -9,7 +9,11 @@ import GuessComp from "./GuessComp";
 import ColorToggle from "./ColorToggle";
 import HintBtn from "./HintBtn";
 
-import { alterClose, getSavedColor, saveGameState } from "../functions/StoreState";
+import {
+  alterClose,
+  getSavedColor,
+  saveGameState,
+} from "../functions/StoreState";
 
 import { calculateContrast } from "../functions/CalculateContrast";
 import { findFocus } from "../functions/FindFocus";
@@ -21,21 +25,21 @@ export default function Guess(props) {
   const [submitted, setSubmitted] = useState(false);
   const [R, setR] = useState(() => {
     const red = getSavedColor("Red", props.number);
-    if(!red){
+    if (!red) {
       return "";
     }
     return red;
   });
   const [G, setG] = useState(() => {
     const green = getSavedColor("Green", props.number);
-    if(!green){
+    if (!green) {
       return "";
     }
     return green;
   });
   const [B, setB] = useState(() => {
     const blue = getSavedColor("Blue", props.number);
-    if(!blue){
+    if (!blue) {
       return "";
     }
     return blue;
@@ -43,32 +47,30 @@ export default function Guess(props) {
   const [rgb, setRgb] = useState("");
   const [close, setClose] = useState(() => {
     const isClose = getSavedColor("Close", props.number);
-    if(!isClose){
+    if (!isClose) {
       return {};
     }
     return isClose;
   });
   const [current, setCurrent] = useState(false);
   const [bwDisplay, setBwDisplay] = useState(() => {
-    const bw = getSavedColor("Background", props.number);
-    if(!bw){
+    const bw = getSavedColor("Contrast", props.number);
+    if (!bw) {
       return "";
     }
-
-    const contrast = calculateContrast(bw);
-    return contrast;
+    return bw;
   });
   const [borderColor, setBorderColor] = useState("#CDD0D5");
   const [backgroundColor, setBackgroundColor] = useState(() => {
     const background = getSavedColor("Background", props.number);
-    if(!background){
+    if (!background) {
       return "white";
     }
     //If background has been saved, assume guess has been submitted
-    if(background){
+    if (background) {
       setSubmitted(true);
     }
-    if(background === answerColor){
+    if (background === answerColor) {
       setCorrect(true);
     }
     return background;
@@ -87,11 +89,10 @@ export default function Guess(props) {
   }, [R, G, B]);
 
   useEffect(() => {
-    if(correct){
+    if (correct) {
       props.passCorrect(correct);
     }
-  },[correct, props.correct]);
-
+  }, [correct, props.correct]); //eslint-disable-line
 
   useEffect(() => {
     if (current && props.number <= 6) {
@@ -111,7 +112,7 @@ export default function Guess(props) {
       if (closeness) {
         props.passGuess(closeness);
       }
-      saveGameState(R,G,B,props.number, rgb, closeness);
+      saveGameState(R, G, B, props.number, rgb, closeness, contrastVal);
     }
     setSubmitted(true);
   };
@@ -169,7 +170,7 @@ export default function Guess(props) {
       closeObj.hints = true;
     }
     setClose(closeObj);
-    alterClose(closeObj,props.number);
+    alterClose(closeObj, props.number);
     return closeObj;
   };
 

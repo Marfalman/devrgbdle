@@ -1,11 +1,8 @@
-import React, { useState } from "react";
+import React from "react";
 
 export default function ColorToggle(props) {
-  const [contrast, setContrast] = useState(props.contrast);
-
   const handleChange = (e) => {
     e.preventDefault();
-    setContrast(e.target.value);
     props.passContrast(e.target.value);
   };
 

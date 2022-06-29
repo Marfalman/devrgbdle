@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import Guess from "./Guess";
 
 export default function Guesses(props) {
