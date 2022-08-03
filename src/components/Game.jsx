@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import AnswerDisplay from "./AnswerDisplay";
 import Guesses from "./Guesses";
 import Share from "./Share";
+import { PlayerStats } from "./PlayerStats";
 import { getSavedGuess, getTotalGuesses } from "../functions/StoreState";
 
 export default function Game() {
@@ -52,6 +53,7 @@ export default function Game() {
 
   return (
     <div className="main">
+      <PlayerStats final = {allGuesses} status = {gameStatus} />
       <Share final={allGuesses} status={gameStatus} />
       <AnswerDisplay status={gameStatus} />
       <Guesses
