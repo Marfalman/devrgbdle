@@ -10,43 +10,36 @@ export const InitialGameState = { //key/value framework for stats cookie
     5: 0,
     6: 0,
     "total": 0,
-    "win": 0
+    "win": 0,
+    "streak": 0,
+    "max_streak": 0
   };
 
 const cookies = new Cookies();
 
-export function savePlayerStats(guesses, win) {
+export function savePlayerStats(lastGuess, win) {
     var today = new Date();
     var tomorrow = ((23-today.getHours())*(60*60)) + ((59-today.getMinutes())*60) + (59-today.getSeconds()); //get time in seconds until next day local time
-
-    let lastGuess = guesses[guesses.length - 1];
-    if (
-        lastGuess.R === "correct" &&
-        lastGuess.G === "correct" &&
-        lastGuess.B === "correct"
-    ) {
-        if(!cookies.get(TODAY_COOKIE)){ //Only set new stats cookie if user hasn't visited site yet today
-            cookies.set(TODAY_COOKIE, "played", { path: '/', maxAge:tomorrow });
-            updateStats(lastGuess.num, win);
-        }
+    if(!cookies.get(TODAY_COOKIE)){ //Only set new stats cookie if user hasn't visited site yet today
+        cookies.set(TODAY_COOKIE, "played", { path: '/', maxAge:tomorrow });
+        updateStats(lastGuess, win);
     }
 }
 
-function updateStats(winGuess, status){
-    let winToUpdate
-    if(cookies.get(STATS_COOKIE)){
-        let currentStats = JSON.stringify(cookies.get(STATS_COOKIE));
-        winToUpdate = JSON.parse(currentStats);
-        winToUpdate[winGuess]++;
-    }
-    else{
-        winToUpdate = InitialGameState;
-        winToUpdate[winGuess]++;
-    }
-    if(status === "win"){
-        winToUpdate["win"]++;
-    }
+function updateStats(winGuess){
+    let winToUpdate = cookies.get(STATS_COOKIE) ? JSON.parse(JSON.stringify(cookies.get(STATS_COOKIE))) : InitialGameState;
     winToUpdate["total"]++;
+    if(winGuess < 7){ //win case
+        winToUpdate[winGuess]++;
+        winToUpdate["win"]++;
+        winToUpdate["streak"]++;
+        if(winToUpdate["streak"] > winToUpdate["max_streak"]){
+            winToUpdate["max_streak"] = winToUpdate["streak"];
+        }
+    }
+    else{ //lose case
+        winToUpdate["streak"] = 0;
+    }
 
     var futureDate = new Date();
     futureDate.setFullYear(2050);
