@@ -1,29 +1,45 @@
 import React, { useState, useEffect } from "react";
-import { Container, Typography, Stack, Paper, Divider } from "@mui/material";
+import { Container, Typography, Stack, Paper, Divider, IconButton } from "@mui/material";
 import Box from '@mui/material/Box';
 import Modal from "@mui/material/Modal";
 import { Cookies } from 'react-cookie';
 import { STATS_COOKIE, savePlayerStats } from "../functions/StoreGetStats";
 import { styled } from '@mui/material/styles'
 import Share from "./Share";
+import CloseIcon from "@mui/icons-material/Close";
 
 export function PlayerStats(props){
 
     const cookies = new Cookies()
-
     const [shown, setShown] = useState(false);
     const handleClose = () => setShown(false);
 
     useEffect(() => {
         if (props.status !== "progress" && props.final.length > 0) {
-            savePlayerStats(props.final, props.status)
-            setShown(true);
+            let lastGuess = props.final[props.final.length - 1];
+            let finalGuess
+            if (
+                lastGuess.R === "correct" &&
+                lastGuess.G === "correct" &&
+                lastGuess.B === "correct"
+            ){
+                finalGuess = lastGuess.num;
+                savePlayerStats(finalGuess);
+                setShown(true);
+            }
+            else if(props.status === "lose"){
+                finalGuess = 7;
+                savePlayerStats(finalGuess);
+                setShown(true);
+            }
+
+
         }
       }, [props.status, props.final]);
 
     //Displays the filled bar dependent on percentage of guesses in that number divided by max guess number
     function FillBar(props){
-        const fillPercent = Math.round((props.guessNum/props.maxGuess) * 100 );
+        const fillPercent = props.maxGuess > 0 ? Math.round((props.guessNum/props.maxGuess) * 100 ) : 0;
         const Item = styled(Paper)(() => ({
             backgroundColor: '#00E600',
             width: fillPercent + "%",
@@ -47,14 +63,27 @@ export function PlayerStats(props){
             textAlign: 'center',
             color: theme.palette.text.secondary
           }));
-        const percentWon = Math.round((props.totalGames/props.gamesWon) * 100 );
+        
+        let percentWon
+        if(props.gamesWon > 0){
+            percentWon = Math.round((props.gamesWon/props.totalGames) * 100 );
+        }
+        else{
+            percentWon = 0
+        }
         return(
-            <Stack direction = "row" spacing = {4} justifyContent = "center">
+            <Stack direction = "row" spacing = {2} justifyContent = "center">
                 <Item elevation={0}>
                     <Typography variant="subtitle1">{props.totalGames} <br /> Games played</Typography> 
                 </Item>
                 <Item elevation={0}>
                 <Typography variant="subtitle1">{percentWon}% <br /> Win Rate </Typography>
+                </Item>
+                <Item elevation={0}>
+                <Typography variant="subtitle1">{props.curStreak} <br /> Current Streak </Typography>
+                </Item>
+                <Item elevation={0}>
+                <Typography variant="subtitle1">{props.maxStr} <br /> Max Streak </Typography>
                 </Item>
             </Stack>
         )
@@ -65,6 +94,8 @@ export function PlayerStats(props){
         let outputGuess
         let winGames
         let allGames
+        let streak
+        let maxStreak
         if (cookies.get(STATS_COOKIE)){
             let currentStats = JSON.stringify(cookies.get(STATS_COOKIE));
             let winToUpdate = JSON.parse(currentStats);
@@ -74,13 +105,15 @@ export function PlayerStats(props){
             let highGuess = Number(Math.max(...listGuess));
             allGames = winToUpdate["total"];
             winGames = winToUpdate["win"];
+            streak = winToUpdate["streak"];
+            maxStreak = winToUpdate["max_streak"];
             outputGuess = listGuess.map((item, index) =>
                 <FillBar guessNum = {item} maxGuess = {highGuess} guessKey = {index} key = {index}/>
             )
         }
         return (
             <div>
-                <WinStats totalGames = {allGames} gamesWon = {winGames}/>
+                <WinStats totalGames = {allGames} gamesWon = {winGames} curStreak = {streak} maxStr = {maxStreak}/>
                 <Stack spacing={.5} style={{ margin: '5px'}}>{outputGuess}</Stack>
             </div>
         );
@@ -109,9 +142,9 @@ export function PlayerStats(props){
                 aria-describedby="modal-modal-description"
             >
                 <Box sx={style}>
-                <Typography id="modal-modal-title" variant="h6" component="h2" sx={{ p: 1 }} align="center">
-                    Statistics
-                </Typography>
+                <IconButton onClick={handleClose}>
+                    <CloseIcon />
+                </IconButton>
                 <Container disableGutters>
                 <div>
                     <DisplayGuessStats />
