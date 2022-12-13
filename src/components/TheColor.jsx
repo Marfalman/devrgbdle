@@ -10,7 +10,7 @@ function daysBetween() {
     new Date(releaseDay),
     new Date(formatToday)
   );
-  return daysBetween;
+  return Math.ceil(daysBetween);
 }
 
 //from: https://stackoverflow.com/questions/11591854/format-date-to-mm-dd-yyyy-in-javascript
