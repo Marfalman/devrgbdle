@@ -59,7 +59,7 @@ export default function GuessComp(props) {
             <p style={{ fontSize: "75%", color: labelColor }}>{props.letter}</p>
           </InputAdornment>
         }
-        inputProps={{ maxLength: 3, min: 0, max: 255 }}
+        inputProps={{ maxLength: 3, min: 0, max: 255, inputMode: "numeric", pattern: "[0-9"}}
         variant="standard"
         value={props.val}
         onChange={(e) => props.passVal(e.target.value)}

@@ -83,26 +83,25 @@ export default function Share(props) {
     }
   }
 
-  return (
-    <div
-      className="shareArea"
-      style={{
-        opacity: shown ? 100 : 0,
-      }}
-    >
-      <Button
-        variant="contained"
-        color="grey"
-        onClick={shareString}
-        onTouchEnd={shareString}
-        style={{ cursor: "pointer" }}
+  if(shown) {
+    return (
+      <div
+        className="shareArea"
       >
-        Share
-      </Button>
-      <Typography sx={{ p: 1 }}>
-        {!copied && "Thanks for playing!"}
-        {copied && "Content copied to clipboard."}
-      </Typography>
-    </div>
-  );
+        <Button
+          variant="contained"
+          color="grey"
+          onClick={shareString}
+          onTouchEnd={shareString}
+          style={{ cursor: "pointer" }}
+        >
+          Share
+        </Button>
+        <Typography sx={{ p: 1 }}>
+          {!copied && "Thanks for playing!"}
+          {copied && "Content copied to clipboard."}
+        </Typography>
+      </div>
+    );
+  }
 }
