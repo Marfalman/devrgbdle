@@ -87,9 +87,6 @@ export default function Share(props) {
     return (
       <div
         className="shareArea"
-        style={{
-          opacity: shown ? 100 : 0,
-        }}
       >
         <Button
           variant="contained"
