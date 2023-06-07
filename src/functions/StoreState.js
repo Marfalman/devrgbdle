@@ -1,4 +1,7 @@
+import { getFormattedDate } from "../components/TheColor";
+
 const currentState = "gameState";
+const pastDays = "pastDays";
 
 const StoredGameState = {
   Red: [],
@@ -8,10 +11,25 @@ const StoredGameState = {
   Background: [],
   Close: [],
   Contrast: [],
+  Status: "progress",
   expiry: new Date().getDay(),
 };
 
+const StoredPastDays = {
+  Win: [],
+  Lose: []
+};
+
+let currDay;
+
+export function setCurrDay(date){
+  currDay = date;
+}
+
 export function saveGameState(R, G, B, num, background, close, bwDisplay) {
+  if (!verifyDate()){
+    return
+  }
   var currentGame = JSON.parse(localStorage.getItem(currentState));
   var gametoEdit = currentGame ? currentGame : StoredGameState;
   gametoEdit.Red.push(R);
@@ -24,7 +42,32 @@ export function saveGameState(R, G, B, num, background, close, bwDisplay) {
   localStorage.setItem(currentState, JSON.stringify(gametoEdit));
 }
 
+export function saveGameProgress(status, date){
+  if(verifyDate()){
+    var currentGame = JSON.parse(localStorage.getItem(currentState));
+    var gametoEdit = currentGame ? currentGame : StoredGameState;
+    gametoEdit.Status = status;
+    localStorage.setItem(currentState, JSON.stringify(gametoEdit));
+  }
+  if(status === "win" || status === "lose"){
+    var pastDayGames = JSON.parse(localStorage.getItem(pastDays));
+    var pastDayEdit = pastDayGames ? pastDayGames : StoredPastDays;
+    const dayLookup = {
+      win: pastDayEdit.Win,
+      lose: pastDayEdit.Lose,
+    };
+    const day = dayLookup[status];
+    if (!day.includes(date)){
+      day.push(date);
+      localStorage.setItem(pastDays, JSON.stringify(pastDayEdit));
+    }
+  }
+}
+
 export function alterClose(close, num) {
+  if(!verifyDate()){
+    return
+  }
   var currentGame = JSON.parse(localStorage.getItem(currentState));
   var gametoEdit = currentGame ? currentGame : StoredGameState;
   gametoEdit.Close[num - 1] = close;
@@ -32,19 +75,24 @@ export function alterClose(close, num) {
 }
 
 export function alterContrast(bw, num) {
+  if(!verifyDate()){
+    return
+  }
   var currentGame = JSON.parse(localStorage.getItem(currentState));
   var gametoEdit = currentGame ? currentGame : StoredGameState;
   gametoEdit.Contrast[num - 1] = bw;
   localStorage.setItem(currentState, JSON.stringify(gametoEdit));
 }
 
-const state = JSON.parse(localStorage.getItem(currentState));
+let state = JSON.parse(localStorage.getItem(currentState));
 
-function verifyDate() {
+function verifyCookie() {
+  state = JSON.parse(localStorage.getItem(currentState));
   const today = new Date().getDay();
   if (!state) {
     return false;
-  } else if (state.expiry !== today) {
+  }
+  else if (state.expiry !== today) {
     localStorage.removeItem(currentState);
     return false;
   } else {
@@ -52,9 +100,14 @@ function verifyDate() {
   }
 }
 
+export function verifyDate() {
+  const formattedToday = getFormattedDate(new Date());
+  return (formattedToday === currDay);
+}
+
 export function getSavedGuess() {
-  if (!verifyDate()) {
-    return null;
+  if (!verifyDate() || !verifyCookie()) {
+    return 1;
   }
 
   const guessNum = state.GuessNum.length - 1;
@@ -62,46 +115,48 @@ export function getSavedGuess() {
 }
 
 export function getSavedColor(type, num) {
-  if (!verifyDate()) {
-    return null;
-  } else if (
-    type === "Red" ||
-    type === "Green" ||
-    type === "Blue" ||
-    type === "Background" ||
-    type === "Close" ||
-    type === "Contrast"
-  ) {
-    const index = num - 1;
-    switch (type) {
-      case "Red":
-        return state.Red[index];
-
-      case "Green":
-        return state.Green[index];
-
-      case "Blue":
-        return state.Blue[index];
-
-      case "Close":
-        return state.Close[index];
-
-      case "Background":
-        return state.Background[index];
-
-      case "Contrast":
-        return state.Contrast[index];
-
-      default:
-        return "N/A";
+  if (!verifyDate() || !verifyCookie()) {
+    if (type === "Background") {
+      return null;
     }
+    if (type === "Close") {
+      return {};
+    }
+    return "";
   }
+
+  const colorLookup = {
+    Red: state.Red,
+    Green: state.Green,
+    Blue: state.Blue,
+    Close: state.Close,
+    Background: state.Background,
+    Contrast: state.Contrast,
+  };
+
+  const colors = colorLookup[type];
+
+  if (colors) {
+    const index = num - 1;
+    return colors[index] || "";
+  }
+
+  return "N/A";
 }
 
+
 export function getTotalGuesses() {
-  if (!verifyDate()) {
-    return null;
+  if (!verifyDate() || !verifyCookie()) {
+    return [];
   }
 
   return state.Close;
+}
+
+export function getGameProgress(){
+  if (!verifyDate() || !verifyCookie()){
+    return "progress";
+  }
+
+  return state.Status;
 }

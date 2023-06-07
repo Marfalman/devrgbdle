@@ -1,4 +1,5 @@
 import { Cookies } from "react-cookie";
+import { verifyDate } from "./StoreState";
 
 export const STATS_COOKIE = "Statistics"
 export const TODAY_COOKIE = "Today"
@@ -22,7 +23,9 @@ export function savePlayerStats(lastGuess, win) {
     var tomorrow = ((23-today.getHours())*(60*60)) + ((59-today.getMinutes())*60) + (59-today.getSeconds()); //get time in seconds until next day local time
     if(!cookies.get(TODAY_COOKIE)){ //Only set new stats cookie if user hasn't visited site yet today
         cookies.set(TODAY_COOKIE, "played", { path: '/', maxAge:tomorrow });
-        updateStats(lastGuess, win);
+        if(verifyDate()){
+            updateStats(lastGuess, win);
+        }
     }
 }
 

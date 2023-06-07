@@ -7,6 +7,7 @@ import { STATS_COOKIE, savePlayerStats } from "../functions/StoreGetStats";
 import { styled } from '@mui/material/styles'
 import Share from "./Share";
 import CloseIcon from "@mui/icons-material/Close";
+import { verifyDate } from "../functions/StoreState";
 
 export function PlayerStats(props){
 
@@ -136,7 +137,7 @@ export function PlayerStats(props){
     return(
         <div>
             <Modal
-                open={shown}
+                open={shown && verifyDate()}
                 onClose={handleClose}
                 aria-labelledby="modal-modal-title"
                 aria-describedby="modal-modal-description"

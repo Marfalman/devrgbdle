@@ -18,6 +18,10 @@ export default function GuessComp(props) {
       setLabelColor(props.bw);
       setInputColor(props.bw);
     }
+    else{
+      setInputColor("#2C2C2C");
+      setLabelColor("#929292");
+    }
   }, [props.bw]);
 
   return (

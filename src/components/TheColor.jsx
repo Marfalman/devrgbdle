@@ -1,9 +1,9 @@
 import { createContext } from "react";
 import { colors } from "../secrets/colors/Colors";
 
-function daysBetween() {
+export function daysBetween(date) {
   const releaseDay = "04/22/2022";
-  const today = new Date();
+  const today = new Date(date)
   const formatToday = getFormattedDate(today).toString();
 
   const daysBetween = getDaysBetween(
@@ -14,7 +14,7 @@ function daysBetween() {
 }
 
 //from: https://stackoverflow.com/questions/11591854/format-date-to-mm-dd-yyyy-in-javascript
-function getFormattedDate(date) {
+export function getFormattedDate(date) {
   let year = date.getFullYear();
   let month = (1 + date.getMonth()).toString().padStart(2, "0");
   let day = date.getDate().toString().padStart(2, "0");
@@ -31,17 +31,17 @@ function getDaysBetween(date1, date2) {
   return Difference_In_Days;
 }
 
-function pickColor() {
-  const picked = colors[daysBetween()];
+export function pickColor(date = new Date()) {
+  const picked = colors[daysBetween(date)];
   if (picked) {
-    return colors[daysBetween()];
+    return colors[daysBetween(date)];
   } else {
     return "rgba(0,0,0,1)";
   }
 }
 
-export const TheColor = createContext(pickColor());
-export const TheDay = createContext(daysBetween());
+export const TheColor = createContext();
+export const TheDay = createContext();
 
 // export const TheColor = createContext("rgba(205,130,200,1)");
 // export const TheColor = createContext("rgba(0,0,0,1)");
