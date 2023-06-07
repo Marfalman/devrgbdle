@@ -8,6 +8,7 @@ import ConfettiEl from "./ConfettiEl";
 import GuessComp from "./GuessComp";
 import ColorToggle from "./ColorToggle";
 import HintBtn from "./HintBtn";
+import { TheDay, getFormattedDate } from "./TheColor";
 
 import {
   alterClose,
@@ -19,7 +20,8 @@ import { calculateContrast } from "../functions/CalculateContrast";
 import { findFocus } from "../functions/FindFocus";
 
 export default function Guess(props) {
-  const answerColor = useContext(TheColor);
+  const { answerColor } = useContext(TheColor)
+  const { currentDay } = useContext(TheDay);
 
   const [correct, setCorrect] = useState(false);
   const [submitted, setSubmitted] = useState(false);
@@ -75,6 +77,39 @@ export default function Guess(props) {
     }
     return background;
   });
+
+  //clear and reset values on day/color context change. Reset to saved state when context value is today
+  useEffect(() => {
+    const today = getFormattedDate(new Date());
+    if(currentDay !== today){
+      setB("");
+      setG("");
+      setR("");
+      setBackgroundColor("white");
+      setClose({});
+      setSubmitted(false);
+      setBwDisplay("");
+    }
+    else{
+      setB(getSavedColor("Blue", props.number));
+      setG(getSavedColor("Green", props.number));
+      setR(getSavedColor("Red", props.number));
+      const background = getSavedColor("Background", props.number)
+      if(background){
+        setBackgroundColor(background);
+        setSubmitted(true);
+      }
+      else{
+        setBackgroundColor("white");
+        setSubmitted(false);
+      }
+      if(backgroundColor === answerColor){
+        setCorrect(true);
+      }
+      setClose(getSavedColor("Close", props.number));
+      setBwDisplay(getSavedColor("Contrast", props.number));
+    }
+  }, [answerColor, currentDay]); //eslint-disable-line
 
   useEffect(() => {
     if (props.number === props.currNo) {

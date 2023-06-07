@@ -7,6 +7,7 @@ import { STATS_COOKIE, savePlayerStats } from "../functions/StoreGetStats";
 import { styled } from '@mui/material/styles'
 import Share from "./Share";
 import CloseIcon from "@mui/icons-material/Close";
+import { verifyDate } from "../functions/StoreState";
 
 export function PlayerStats(props){
 
@@ -15,7 +16,7 @@ export function PlayerStats(props){
     const handleClose = () => setShown(false);
 
     useEffect(() => {
-        if (props.status !== "progress" && props.final.length > 0) {
+        if (props.status !== "progress" && props.final.length > 0 && verifyDate()) {
             let lastGuess = props.final[props.final.length - 1];
             let finalGuess
             if (

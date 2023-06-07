@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Button, Typography } from "@mui/material";
-import { TheDay } from "./TheColor";
+import { TheDay, daysBetween } from "./TheColor";
 
 export default function Share(props) {
   //props: final (guesses), status
@@ -8,10 +8,14 @@ export default function Share(props) {
 
   const [shown, setShown] = useState(false);
   const [copied, setCopied] = useState(false);
+  const { currentDay, newDay } = useContext(TheDay);
 
   useEffect(() => {
     if (props.status !== "progress") {
       setShown(true);
+    }
+    else{
+      setShown(false);
     }
   }, [props.status]);
 
@@ -62,7 +66,7 @@ export default function Share(props) {
   const shareString = () => {
     const loseWin = getWin(props.final);
     const emojis = formatScore(props.final);
-    const dayNo = TheDay._currentValue;
+    const dayNo = daysBetween(currentDay);
     const finalStr = `RGBdle ${dayNo}: ${loseWin}/6\n${emojis}\n${url}`;
     copyToClipBoard(finalStr);
   };
