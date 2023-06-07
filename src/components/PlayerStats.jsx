@@ -16,7 +16,7 @@ export function PlayerStats(props){
     const handleClose = () => setShown(false);
 
     useEffect(() => {
-        if (props.status !== "progress" && props.final.length > 0) {
+        if (props.status !== "progress" && props.final.length > 0 && verifyDate()) {
             let lastGuess = props.final[props.final.length - 1];
             let finalGuess
             if (
@@ -137,7 +137,7 @@ export function PlayerStats(props){
     return(
         <div>
             <Modal
-                open={shown && verifyDate()}
+                open={shown}
                 onClose={handleClose}
                 aria-labelledby="modal-modal-title"
                 aria-describedby="modal-modal-description"

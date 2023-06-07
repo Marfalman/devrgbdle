@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import CssBaseline from "@mui/material/CssBaseline";
 import "./App.css";
-import { setChosenDate } from "./functions/StoreState";
 
 import Icons from "./components/Icons";
 import Logo from "./components/Logo";
