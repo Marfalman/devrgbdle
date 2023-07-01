@@ -30,19 +30,19 @@ export default function Guess(props) {
         <GuessComp
           letter={"R"}
           bw={bwDisplay}
-          val={props.colors.R || 255}
+          val={props.colors.R !== undefined ? props.colors.R : 255}
           disable={true}
         />
         <GuessComp
           letter={"G"}
           bw={bwDisplay}
-          val={props.colors.G || 255}
+          val={props.colors.G !== undefined ? props.colors.G : 255}
           disable={true}
         />
         <GuessComp
           letter={"B"}
           bw={bwDisplay}
-          val={props.colors.B || 255}
+          val={props.colors.B !== undefined ? props.colors.B : 255}
           disable={true}
         />
         <ColorToggle contrast={bwDisplay} passContrast={setBwDisplay} />
