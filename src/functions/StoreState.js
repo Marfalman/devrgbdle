@@ -78,11 +78,8 @@ async function getUserData(){
     if (loggedInUser) {
       // Query the datastore for the game history that has the same owner as the logged-in user.
       const gameHistories = await DataStore.query(GameHistory);
-      console.log(gameHistories[0])
       const userGameHistories = gameHistories.filter(history => history.owner === loggedInUser);
-      console.log(userGameHistories)
       const activeGameHistories = userGameHistories.filter(history => history._deleted === null);
-      console.log(activeGameHistories)
       return activeGameHistories;
       // Handle the retrieved data
     } else {

@@ -76,16 +76,17 @@ function App() {
     if (data.payload.event === 'signIn') {
       setSignedIn(true);
       console.log('User signed in');
+      await DataStore.start();
     } else if (data.payload.event === 'signOut') {
       setSignedIn(false);
       localStorage.removeItem("pastDays");
       deleteStatsCookie();
       console.log('User signed out');
-    } else if (data.payload.event === 'signUp') {
+    } /*else if (data.payload.event === 'signUp') {
       setSignedIn(true);
       console.log('User signed up');
       await DataStore.start();
-    }
+    } */
   });
 
   useEffect(() => {
@@ -101,6 +102,7 @@ function App() {
     }
     getLoggedIn()
     .then(async (updatedUser) => {
+      console.log(updatedUser)
       if(updatedUser && updatedUser.username !== user){
         setUser(updatedUser.username);
         setSignedIn(true);
@@ -117,6 +119,7 @@ function App() {
       }
     })
   }, [signedIn, user]);
+  
 
   const signOut = async () => {
     console.log("trying to sign out")
@@ -147,7 +150,7 @@ function App() {
         <div>
           <Icons passHelpOpen={setHelpOpen} passPastOpen={setPastOpen} passLeaderboardOpen={setLeaderboardOpen}/>
           <Logo />
-          <IconsRight passLeaderboardOpen={setLeaderboardOpen} passShowSignIn={showSignIn} isLoggedIn = {signedIn} signOut={signOut} userName={user}/>
+          <IconsRight passLeaderboardOpen={setLeaderboardOpen} passShowSignIn={showSignIn} isLoggedIn ={signedIn} signOut={signOut} userName={user}/>
         </div>
         <HelpModal open={helpOpen} passHelpOpen={setHelpOpen} />
         <BasicDateCalendar open = {pastOpen} passPastOpen={setPastOpen} changedUser={signedIn}/>

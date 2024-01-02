@@ -149,7 +149,7 @@ export function SignUpModal(props){
           required
           fullWidth
           id="confirmation"
-          label="confirmation code"
+          label="Confirmation Code"
           name="confirmation"
         />
         <Button
