@@ -1,0 +1,12 @@
+{
+  "AppSyncApiName": "rgbcolors",
+  "DynamoDBBillingMode": "PAY_PER_REQUEST",
+  "DynamoDBEnableServerSideEncryption": false,
+  "AuthModeLastUpdated": "2023-09-27T04:03:54.852Z",
+  "AuthCognitoUserPoolId": {
+    "Fn::GetAtt": [
+      "authrgbcolors",
+      "Outputs.UserPoolId"
+    ]
+  }
+}
