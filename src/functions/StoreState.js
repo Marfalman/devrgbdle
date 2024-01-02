@@ -1,5 +1,6 @@
 import { getFormattedDate } from "../components/TheColor";
 
+//Names for cookies holding current game values
 const currentState = "gameState";
 const pastDays = "pastDays";
 
