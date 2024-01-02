@@ -14,6 +14,13 @@ export function PlayerStats(props){
     const cookies = new Cookies()
     const [shown, setShown] = useState(false);
     const handleClose = () => setShown(false);
+    const [statsCookie, setStatsCookie] = useState(() => {
+        const cookie = cookies.get(STATS_COOKIE);
+        if (!cookie) {
+        return null;
+        }
+        return cookie;
+    });
 
     useEffect(() => {
         if (props.status !== "progress" && props.final.length > 0 && verifyDate()) {
@@ -25,7 +32,7 @@ export function PlayerStats(props){
                 lastGuess.B === "correct"
             ){
                 finalGuess = lastGuess.num;
-                savePlayerStats(finalGuess);
+                savePlayerStats(finalGuess)
                 setShown(true);
             }
             else if(props.status === "lose"){
@@ -34,9 +41,20 @@ export function PlayerStats(props){
                 setShown(true);
             }
 
-
         }
       }, [props.status, props.final]);
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            const cookie = cookies.get(STATS_COOKIE);
+            if (cookie) {
+                setStatsCookie(cookie);
+                clearInterval(interval);
+            }
+        }, 1000);
+    return () => clearInterval(interval);
+    }, [shown]);
+      
 
     //Displays the filled bar dependent on percentage of guesses in that number divided by max guess number
     function FillBar(props){
@@ -97,21 +115,22 @@ export function PlayerStats(props){
         let allGames
         let streak
         let maxStreak
-        if (cookies.get(STATS_COOKIE)){
-            let currentStats = JSON.stringify(cookies.get(STATS_COOKIE));
-            let winToUpdate = JSON.parse(currentStats);
-            for(let i =1; i <=6; i++){
-                listGuess.push(winToUpdate[i]);
-            }
-            let highGuess = Number(Math.max(...listGuess));
-            allGames = winToUpdate["total"];
-            winGames = winToUpdate["win"];
-            streak = winToUpdate["streak"];
-            maxStreak = winToUpdate["max_streak"];
-            outputGuess = listGuess.map((item, index) =>
-                <FillBar guessNum = {item} maxGuess = {highGuess} guessKey = {index} key = {index}/>
-            )
+        if (!statsCookie) {
+            return <div>Loading...</div>;
         }
+        let currentStats = JSON.stringify(cookies.get(STATS_COOKIE));
+        let winToUpdate = JSON.parse(currentStats);
+        for(let i =1; i <=6; i++){
+            listGuess.push(winToUpdate[i]);
+        }
+        let highGuess = Number(Math.max(...listGuess));
+        allGames = winToUpdate["total"];
+        winGames = winToUpdate["win"];
+        streak = winToUpdate["streak"];
+        maxStreak = winToUpdate["max_streak"];
+        outputGuess = listGuess.map((item, index) =>
+            <FillBar guessNum = {item} maxGuess = {highGuess} guessKey = {index} key = {index}/>
+        )
         return (
             <div>
                 <WinStats totalGames = {allGames} gamesWon = {winGames} curStreak = {streak} maxStr = {maxStreak}/>

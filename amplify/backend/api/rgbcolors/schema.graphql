@@ -1,0 +1,29 @@
+type PlayerStats @model @auth(rules: [{allow: owner}]) {
+  id: ID!
+  guessData: AWSJSON
+  total: Int
+  win: Int
+  streak: Int
+  maxStreak: Int
+}
+
+type GameHistory @model @auth(rules: [{allow: owner}]) {
+  id: ID!
+  WinDays: AWSJSON
+  LoseDays: AWSJSON
+}
+
+type Colors @model @auth(rules: [{allow: public}, {allow: private, operations: [read]}]) {
+  id: ID!
+  Color: String!
+}
+
+type LeaderBoard @model @auth(rules: [{allow: public, operations: [read]}, {allow: private, operations: [create, read, update]}]) {
+  id: ID!
+  winStreak: Int!
+  winPercent: Int!
+  preferred_username: String!
+  totalWins: Int
+  gamesPlayed: Int
+}
+ 

@@ -8,17 +8,33 @@ import Modal from "@mui/material/Modal";
 import { TheColor, TheDay, pickColor, getFormattedDate } from "./TheColor";
 import { PickersDay } from "@mui/x-date-pickers";
 import { green, red } from "@mui/material/colors";
+import { getPastDays } from "../functions/StoreState";
+import { Auth } from "aws-amplify";
 
-function getWinLoseCookie() {
-  const winLoseCookie = localStorage.getItem('pastDays');
-  return winLoseCookie ? JSON.parse(winLoseCookie) : {};
+async function getWinLoseData() {
+  try {
+    const pastDays = await getPastDays();
+    return(pastDays);
+  } catch (error) {
+    console.log("no signed in user from leaderboard");
+  }
+}
+
+async function getLoggedIn(){
+  try{
+    const user = await Auth.currentAuthenticatedUser()
+    return user
+  } catch(error){
+    console.log("no signed in user from past days")
+  }
 }
 
 export default function BasicDateCalendar(props) {
   const { newColor } = useContext(TheColor);
   const { newDay } = useContext(TheDay);
   const [newDate, setNewDate] = useState(getFormattedDate(new Date()));
-  const [winLoss, setWinLoss] = useState(getWinLoseCookie());
+  const [winLoss, setWinLoss] = useState();
+  const [user, setUser] = useState("");
   const handleClose = () => props.passPastOpen(false);
   const style = {
     position: 'absolute',
@@ -33,8 +49,18 @@ export default function BasicDateCalendar(props) {
   };
 
   useEffect(() => {
-    setWinLoss(getWinLoseCookie());
-  },[props.open]);
+    getLoggedIn()
+    .then(curUser => {
+      if (curUser !== user){
+        setUser(curUser);
+      }
+    })
+  }, [props.open]);
+
+  
+  useEffect(() => {
+    getWinLoseData().then(pastDayData => {setWinLoss(pastDayData);});
+  },[user, props.open, props.changedUser]);
 
   function renderDay(props) {
     const { day, outsideCurrentMonth, ...other } = props;
@@ -49,7 +75,7 @@ export default function BasicDateCalendar(props) {
       day.toDate() > new Date() || day.toDate() < new Date("04/22/2022")) 
       && formattedDate !== today;
 
-    return (
+      return (
       <PickersDay {...other} 
       outsideCurrentMonth={outsideCurrentMonth}
       disabled={isDisabled} 
