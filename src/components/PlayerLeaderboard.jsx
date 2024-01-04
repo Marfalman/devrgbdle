@@ -86,7 +86,7 @@ export function PlayerLeaderboard(props){
 
     function PlayerInfo(props){
         const Item = styled(Paper)(({ theme }) => ({
-            backgroundColor: props.row.preferred_username === user ? 'rgb(239 245 252)': '#fff',
+            backgroundColor: '#fff',
             ...theme.typography.body2,
             padding: theme.spacing(1),
             textAlign: 'left',
@@ -140,9 +140,9 @@ export function PlayerLeaderboard(props){
               <List sx={{ width: '100%', height: '100%', maxWidth: 360, bgcolor: 'background.paper', paddingBottom: '50px' }}>
                 {itemsDataStore.map((row, index) => (
                   <React.Fragment key={index}>
-                    <ListItem alignItems="flex-start" selected={row.preferred_username === user } >
+                    <ListItem alignItems="flex-start" >
                     <ListItemIcon sx={{ minWidth: 30}}>
-                        <Badge badgeContent={index+1} color={index === 0 ? "warning" : "primary"} anchorOrigin={{ vertical: 'center', horizontal: 'center'}} />
+                        <Badge badgeContent={index+1} color={row.preferred_username === user ? "warning" : "primary"} anchorOrigin={{ vertical: 'center', horizontal: 'center'}} />
                     </ListItemIcon>
                       <ListItemText
                         secondaryTypographyProps={{ component: 'span' }}

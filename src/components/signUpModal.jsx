@@ -34,6 +34,7 @@ export function SignUpModal(props){
   const [signUpFail, setSignUpFail] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
   const [userPass, setUserPass] = useState('')
+  const [errorMsg, setErrorMsg] = useState('')
 
   const handleConfirmUser = (event) => {
     event.preventDefault();
@@ -68,7 +69,7 @@ export function SignUpModal(props){
     })
     .catch(error => {
       setSignUpFail(true)
-      console.log("Error from sign in: " + error)
+      setErrorMsg(error.message)
     })
   };
   const style = {
@@ -85,7 +86,7 @@ export function SignUpModal(props){
   return (
     <div>
       {!showConfirm ? <div>
-        {signUpFail && <Alert severity="error">Username already exists. Please choose a different username</Alert>}
+        {signUpFail && <Alert severity="error">{errorMsg}</Alert>}
         <Typography component="h1" variant="h5">
           Sign Up
         </Typography>
