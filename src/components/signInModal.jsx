@@ -12,7 +12,6 @@ export async function signIn(username, password){
       const user = await Auth.signIn(username, password);
 
     } catch (error) {
-      console.log("error")
       throw new Error(error)
     }
 }
@@ -20,7 +19,6 @@ export async function signIn(username, password){
 async function forgotPassword(username) {
   try {
     const data = await Auth.forgotPassword(username);
-    console.log(data);
   } catch(error) {
     throw new Error(error)
   }
@@ -30,7 +28,6 @@ async function forgotPassword(username) {
 async function forgotPasswordSubmit(username, code, newPassword) {
   try {
     const data = await Auth.forgotPasswordSubmit(username, code, newPassword);
-    console.log(data);
   } catch(error) {
     throw new Error(error)
   }
@@ -46,13 +43,11 @@ export function SignInModal(props){
       const data = new FormData(event.currentTarget);
       forgotPassword(data.get('username'))
       .then(user => {
-        console.log("Success from forgot: ")
         setSignInFail(false)
         setSubmitNewPassword(true)
       })
       .catch(error => {
         setSignInFail(true)
-        console.log("Error from forgot: " + error)
       })
     };
 
@@ -67,17 +62,12 @@ export function SignInModal(props){
       .then(user => signIn(data.get('username'), data.get('newPassword')))
       .catch(error => {
         setSignInFail(true)
-        console.log("Error from forgot: " + error)
       })
     };
 
     const handleSubmit = (event) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
-        console.log({
-          email: data.get('username'),
-          password: data.get('password'),
-        });
         signIn(data.get('username'), data.get('password'))
         .then(user => {
           setSignInFail(false)
@@ -85,7 +75,6 @@ export function SignInModal(props){
         })
         .catch(error => {
           setSignInFail(true)
-          console.log("Error from sign in: " + error)
         })
       };
 

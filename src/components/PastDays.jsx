@@ -9,23 +9,14 @@ import { TheColor, TheDay, pickColor, getFormattedDate } from "./TheColor";
 import { PickersDay } from "@mui/x-date-pickers";
 import { green, red } from "@mui/material/colors";
 import { getPastDays } from "../functions/StoreState";
-import { Auth } from "aws-amplify";
+import { getLoggedIn } from "../functions/StoreState";
 
 async function getWinLoseData() {
   try {
     const pastDays = await getPastDays();
     return(pastDays);
   } catch (error) {
-    console.log("no signed in user from leaderboard");
-  }
-}
-
-async function getLoggedIn(){
-  try{
-    const user = await Auth.currentAuthenticatedUser()
-    return user
-  } catch(error){
-    console.log("no signed in user from past days")
+    return [];
   }
 }
 
@@ -60,7 +51,7 @@ export default function BasicDateCalendar(props) {
   
   useEffect(() => {
     getWinLoseData().then(pastDayData => {setWinLoss(pastDayData);});
-  },[user, props.open, props.changedUser]);
+  },[user, props.open]);
 
   function renderDay(props) {
     const { day, outsideCurrentMonth, ...other } = props;

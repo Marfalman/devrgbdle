@@ -16,7 +16,6 @@ async function signUp(email, password, username){
     })
 
   } catch (error) {
-    console.log("error from sign in: " + error)
     throw new Error(error)
   }
 }
@@ -25,7 +24,6 @@ async function confirmSignUp(username, code){
   try{
     const user = await Auth.confirmSignUp(username, code)
   } catch(error) {
-    console.log("error from confirm: " + error)
     throw new Error(error);
   }
 }
@@ -46,7 +44,6 @@ export function SignUpModal(props){
     })
     .then(user => signIn(data.get('username'), userPass))
     .catch(error => {
-      console.log(error)
       setSignUpFail(true)
     })
 
@@ -56,11 +53,6 @@ export function SignUpModal(props){
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-      nickname: data.get('nickname'),
-    });
     setUserPass(data.get('password'));
     signUp(data.get('email'), data.get('password'), data.get('username'))
     .then(user => {

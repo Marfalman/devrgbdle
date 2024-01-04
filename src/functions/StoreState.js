@@ -1,5 +1,5 @@
 import { getFormattedDate } from "../components/TheColor";
-import { Auth, DataStore, Predicates } from "aws-amplify";
+import { Auth, DataStore } from "aws-amplify";
 import { GameHistory } from "../models";
 
 //Names for cookies holding current game values
@@ -23,12 +23,12 @@ export const StoredPastDays = {
   Lose: []
 };
 
-async function getLoggedIn(){
+export async function getLoggedIn(){
   try{
     const user = await Auth.currentAuthenticatedUser()
     return user.username;
   } catch(error){
-    console.log("no signed in user")
+    return ""
   }
 }
 
@@ -37,7 +37,6 @@ export async function updateUserHistory(pastDays){
     const gameHistory = await getUserData();
 
     if (gameHistory.length === 0){
-      console.log("creating new game history")
       createGameHistory(pastDays);
       return
     }
@@ -48,7 +47,6 @@ export async function updateUserHistory(pastDays){
         const updatedLoseDays = [...(gameHistory[0].LoseDays) || []]; // Create a new array or use an empty array if undefined
         //updatedWinDays = pastDays.Win;
         //updatedLoseDays = pastDays.Lose;
-        console.log(updatedLoseDays)
 
         // If any item in pastDays.Win is not in updatedWinDays, add it
         pastDays.Win.forEach((item) => {
@@ -83,19 +81,16 @@ async function getUserData(){
       return activeGameHistories;
       // Handle the retrieved data
     } else {
-      console.log('User not logged in or username not found.');
       return [];
     }
 
   } catch (error) {
-    console.error('Error querying game histories:', error);
     // Handle the error
     return [];
   }
 }
 
 async function createGameHistory(pastDays){
-  console.log(pastDays)
   try{
     const user = await DataStore.save(
       new GameHistory({
@@ -104,7 +99,6 @@ async function createGameHistory(pastDays){
       })
     );
   } catch (error) {
-    console.log("hello yea there's an error writing")
     console.log(error);
   }
 }
@@ -134,7 +128,6 @@ export async function getPastDays() {
       }
     }
   } catch (error) {
-    console.log('Error getting past days: ' + error);
     throw new Error(error)
   } 
 
@@ -182,29 +175,9 @@ export async function saveGameProgress(status, date){
     if (!day.includes(date)){
       day.push(date);
       if (loggedIn){
-        //let databaseGameData = await getUserData();
-        //If user is logged in and if there is a local storage entry, check if there is a record for them in the database
-        //If there is not a record in the database, create one
-        //console.log(databaseGameData.length)
-        /*
-        if(databaseGameData.length === 0){
-          console.log("createing new game history")
-          await createGameHistory(pastDayEdit);
-        }
-        else if(databaseGameData.length > 0){
-          console.log("updating game history cuz it exists")
-          const updatePastDays = {
-            Win: [...(databaseGameData[0].WinDays) || []],
-            Lose: [...(databaseGameData[0].LoseDays) || []],
-          }
-          await updateUserHistory(pastDayEdit);
-          localStorage.setItem(pastDays, JSON.stringify(updatePastDays));
-        }
-        */
         
       const databaseGameData = getUserData();
        try{
-        console.log(databaseGameData)
         if(databaseGameData.length > 0){
           const updatePastDays = {
             Win: [...(databaseGameData[0].WinDays) || []],

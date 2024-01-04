@@ -2,15 +2,7 @@ import { Cookies } from "react-cookie";
 import { verifyDate, getSavedGuess, getGameProgress } from "./StoreState";
 import { Auth, DataStore, Predicates } from "aws-amplify";
 import { PlayerStats, LeaderBoard } from "../models";
-
-async function getLoggedIn(){
-    try{
-      const user = await Auth.currentAuthenticatedUser()
-      return user.username;
-    } catch(error){
-      console.log("no signed in user")
-    }
-  }
+import { getLoggedIn } from "./StoreState";
 
 export const STATS_COOKIE = "Statistics"
 export const TODAY_COOKIE = "Today"
@@ -83,19 +75,16 @@ async function getPlayerStats(){
           return userPlayerStats;
           // Handle the retrieved data
         } else {
-          console.log('User not logged in or username not found.');
           return [];
         }
     
       } catch (error) {
-        console.error('Error querying game histories:', error);
         // Handle the error
         return [];
       }
 }
 
 async function createPlayerStats(stats){
-    console.log(stats)
     try{
       const user = await DataStore.save(
         new PlayerStats({
@@ -107,7 +96,6 @@ async function createPlayerStats(stats){
         })
       );
     } catch (error) {
-      console.log("hello yea there's an error writing")
       console.log(error);
     }
 }
@@ -115,11 +103,9 @@ async function createPlayerStats(stats){
 async function updatePlayerStats(stats){
     try{
       const playerStats = await getPlayerStats();
-      console.log(playerStats)
   
       const updatedGame = await DataStore.save(
         PlayerStats.copyOf(playerStats[0], updated => {
-            console.log(updated)
             updated.guessData = guessHistory(stats);
             updated.total = stats["total"];
             updated.win = stats["win"];
@@ -128,7 +114,7 @@ async function updatePlayerStats(stats){
         })
       )
     } catch(error){
-      console.log(error)
+      throw new Error(error)
     }
 }
 
@@ -150,7 +136,6 @@ export async function getStatistics() {
             "streak": pastStatistics[0].streak,
             "max_streak": pastStatistics[0].maxStreak
           }
-          console.log(pastStatsData)
           return pastStatsData;
         } 
         else{
@@ -158,7 +143,6 @@ export async function getStatistics() {
         }
       }
     } catch (error) {
-      console.log('Error getting past stats: ' + error);
       throw new Error(error)
     } 
 
@@ -216,7 +200,6 @@ async function updateStats(winGuess){
     if(loggedIn){
         const pastStats = await getStatistics();
         if(Object.keys(pastStats).length > 0){
-            console.log(pastStats)
             winToUpdate = pastStats;
         }
 

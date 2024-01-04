@@ -15,17 +15,8 @@ import { styled } from '@mui/material/styles';
 import Paper from '@mui/material/Paper';
 import Badge from '@mui/material/Badge';
 import { ListItemIcon } from "@mui/material";
-import { Auth } from "aws-amplify";
+import { getLoggedIn } from "../functions/StoreState";
 
-
-async function getLoggedIn(){
-    try{
-      const user = await Auth.currentAuthenticatedUser()
-      return user
-    } catch(error){
-      console.log("no signed in user from leaderboard")
-    }
-  }
 
 function capFirstLetter(name) {
   return name.charAt(0).toUpperCase() + name.slice(1);
@@ -41,7 +32,7 @@ export function PlayerLeaderboard(props){
         getLoggedIn()
         .then(user => {
           if (user){
-            setUser(user.username)
+            setUser(user)
           }
           else{
             setUser("")
@@ -111,7 +102,7 @@ export function PlayerLeaderboard(props){
                 </Item>
                 <Item elevation={0}>
                     <Typography variant="subtitle1" sx={{marginLeft: .5, color: grey[900]}}>{props.row.gamesPlayed}</Typography>
-                    <Typography variant="caption">Streak</Typography> 
+                    <Typography variant="caption">Games</Typography> 
                 </Item>
             </Stack>
 

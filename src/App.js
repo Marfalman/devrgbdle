@@ -33,7 +33,7 @@ async function getLoggedIn(){
     const user = await Auth.currentAuthenticatedUser()
     return user
   } catch(error){
-    console.log("no signed in user")
+    return ""
   }
 }
 
@@ -52,7 +52,6 @@ async function getUserData(){
     }
 
   } catch (error) {
-    console.error('Error querying game histories:', error);
     // Handle the error
     return [];
   }
@@ -75,18 +74,12 @@ function App() {
   Hub.listen('auth', async (data) => {
     if (data.payload.event === 'signIn') {
       setSignedIn(true);
-      console.log('User signed in');
       await DataStore.start();
     } else if (data.payload.event === 'signOut') {
       setSignedIn(false);
       localStorage.removeItem("pastDays");
       deleteStatsCookie();
-      console.log('User signed out');
-    } /*else if (data.payload.event === 'signUp') {
-      setSignedIn(true);
-      console.log('User signed up');
-      await DataStore.start();
-    } */
+    }
   });
 
   useEffect(() => {
@@ -102,7 +95,6 @@ function App() {
     }
     getLoggedIn()
     .then(async (updatedUser) => {
-      console.log(updatedUser)
       if(updatedUser && updatedUser.username !== user){
         setUser(updatedUser.username);
         setSignedIn(true);
@@ -122,7 +114,6 @@ function App() {
   
 
   const signOut = async () => {
-    console.log("trying to sign out")
     try {
       await Auth.signOut();
     } catch (error) {
